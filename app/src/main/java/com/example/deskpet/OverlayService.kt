@@ -206,7 +206,7 @@ class OverlayService : Service() {
             setBackgroundColor(0x00000000)
             settings.apply {
                 javaScriptEnabled = true; domStorageEnabled = true
-                allowFileAccess = true; cacheMode = WebSettings.LOAD_DEFAULT
+                allowFileAccess = true; cacheMode = WebSettings.LOAD_NO_CACHE
             }
             webViewClient = WebViewClient()
             loadUrl("file:///android_asset/pet.html")

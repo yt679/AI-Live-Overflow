@@ -4,46 +4,34 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Skull mask silhouette -->
+    <!-- Skull outline -->
     <path
         android:fillColor="#E8E0D5"
-        android:pathData="M30,40 Q30,20 54,18 Q78,20 78,40 Q78,58 54,60 Q30,58 30,40Z"/>
-    <!-- Eye sockets -->
-    <ellipse
+        android:pathData="M30,42 Q30,20 54,18 Q78,20 78,42 Q78,58 54,60 Q30,58 30,42Z"/>
+    <!-- Left eye (dark socket) -->
+    <path
         android:fillColor="#111"
-        android:cx="42"
-        android:cy="40"
-        android:rx="8"
-        android:ry="7"/>
-    <ellipse
+        android:pathData="M36,38 Q36,33 42,33 Q48,33 48,38 Q48,43 42,43 Q36,43 36,38Z"/>
+    <!-- Left eye glow -->
+    <path
+        android:fillColor="#FF6600"
+        android:pathData="M39,38 Q39,36 42,36 Q45,36 45,38 Q45,40 42,40 Q39,40 39,38Z"/>
+    <!-- Right eye (dark socket) -->
+    <path
         android:fillColor="#111"
-        android:cx="66"
-        android:cy="40"
-        android:rx="8"
-        android:ry="7"/>
-    <!-- Eye glow -->
-    <ellipse
+        android:pathData="M60,38 Q60,33 66,33 Q72,33 72,38 Q72,43 66,43 Q60,43 60,38Z"/>
+    <!-- Right eye glow -->
+    <path
         android:fillColor="#FF6600"
-        android:cx="42"
-        android:cy="40"
-        android:rx="4"
-        android:ry="3"/>
-    <ellipse
-        android:fillColor="#FF6600"
-        android:cx="66"
-        android:cy="40"
-        android:rx="4"
-        android:ry="3"/>
-    <!-- Nose -->
+        android:pathData="M63,38 Q63,36 66,36 Q69,36 69,38 Q69,40 66,40 Q63,40 63,38Z"/>
+    <!-- Nose cavity -->
     <path
         android:fillColor="#111"
         android:pathData="M50,48 L54,52 L58,48Z"/>
-    <!-- Mouth -->
-    <line
+    <!-- Mouth line -->
+    <path
+        android:fillColor="#00000000"
         android:strokeColor="#333"
         android:strokeWidth="1.2"
-        android:x1="44"
-        android:y1="56"
-        android:x2="64"
-        android:y2="56"/>
+        android:pathData="M44,56 L64,56"/>
 </vector>

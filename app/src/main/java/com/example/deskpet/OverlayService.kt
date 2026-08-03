@@ -1,6 +1,7 @@
 package com.example.deskpet
 
 import android.app.*
+import java.util.Random
 import android.app.usage.UsageStatsManager
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -183,15 +184,16 @@ class OverlayService : Service() {
         }
 
         handler.postDelayed({
-            when (outfit) {
-                "default" -> sayBubble("$appName 啊", "soft")
-                "stealth" -> sayBubble("安静", "cold")
-                "formal" -> sayBubble("正经点", "default")
-                "work" -> sayBubble("搬砖了啊", "default")
-                "music" -> sayBubble("来点音乐", "warm")
-                "chill" -> sayBubble("逛起来了", "soft")
-                "read" -> sayBubble("看书了啊", "soft")
+            val lines = when (outfit) {
+                "default" -> arrayOf("$appName 啊", "回来了", "在这", "嗯", "盯着呢", "继续", "我在这", "随你", "看你的", "行吧")
+                "stealth" -> arrayOf("安静", "隐身", "别出声", "潜伏中", "什么都没看到", "低调", "不打扰", "继续忙你的")
+                "formal" -> arrayOf("正经点", "好好说话", "严肃", "注意形象", "商务时间", "专业点", "别闹", "说正事")
+                "work" -> arrayOf("搬砖了啊", "干活了", "开干", "开始搬", "砖头在召唤", "干活干活", "别摸鱼", "盯你进度")
+                "music" -> arrayOf("来点音乐", "节奏不错", "摇头晃脑中", "这歌还行", "放点好听的", "来首经典的", "抖腿", "耳朵要坏了")
+                "chill" -> arrayOf("逛起来了", "悠闲", "放松", "逛着", "慢悠悠", "躺平", "舒服", "晃着")
+                "read" -> arrayOf("看书了啊", "长知识", "翻页", "安静看", "有文化", "别吵", "看得进去吗", "读到哪了")
             }
+            sayBubble(lines[Random.nextInt(lines.size)], "soft")
         }, 600)
     }
 

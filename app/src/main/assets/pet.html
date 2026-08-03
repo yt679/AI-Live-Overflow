@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: transparent; overflow: visible; width: 160px; height: 240px; display: flex; align-items: center; justify-content: center; font-family: sans-serif; position: relative; }
+body { background: transparent; overflow: visible; width: 100px; height: 150px; display: flex; align-items: center; justify-content: center; font-family: sans-serif; position: relative; }
 
-#pet { position: relative; width: 120px; height: 160px; transition: transform 0.3s ease; overflow: visible; }
+#pet { position: relative; width: 75px; height: 100px; transition: transform 0.3s ease; overflow: visible; }
 
 #heatOverlay { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; transition: background 0.8s ease; }
 
-#bubble { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); padding: 3px 10px; border-radius: 10px; font-size: 11px; white-space: nowrap; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 999; }
+#bubble { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); padding: 2px 7px; border-radius: 8px; font-size: 9px; white-space: nowrap; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 999; }
 #bubble.show { opacity: 1; }
 #bubble.default { background: #333; color: #eee; }
 #bubble.angry { background: #4a1010; color: #ff6666; }
@@ -19,7 +19,7 @@ body { background: transparent; overflow: visible; width: 160px; height: 240px; 
 #bubble.warm { background: #4a3020; color: #ffcc88; }
 #bubble.cold { background: #1a2a3a; color: #88ccff; }
 
-#zzz { position: absolute; top: 8px; right: 20px; font-size: 14px; color: #88aacc; opacity: 0; transition: opacity 0.4s; }
+#zzz { position: absolute; top: 4px; right: 12px; font-size: 10px; color: #88aacc; opacity: 0; transition: opacity 0.4s; }
 #zzz.show { opacity: 0.8; }
 
 .bounce { animation: bounce 0.4s ease; }
@@ -32,23 +32,23 @@ body { background: transparent; overflow: visible; width: 160px; height: 240px; 
 .tilt-left { transform: rotate(-8deg); }
 .tilt-tiny-right { transform: rotate(4deg); }
 .tilt-tiny-left { transform: rotate(-4deg); }
-.sit { transform: translateY(8px); }
+.sit { transform: translateY(5px); }
 .carry { animation: carry 1.2s ease-in-out infinite; }
 .drowsy { animation: drowsy 2s ease-in-out infinite; }
 .peek { animation: peek 1.5s ease-in-out infinite; }
 .bubble { animation: bubble 1.8s ease-in-out infinite; }
 
-@keyframes bounce { 0%,100% { transform: translateY(0); } 30% { transform: translateY(-12px); } 60% { transform: translateY(-4px); } }
+@keyframes bounce { 0%,100% { transform: translateY(0); } 30% { transform: translateY(-8px); } 60% { transform: translateY(-3px); } }
 @keyframes flinch { 0% { transform: scale(1); } 30% { transform: scale(0.85, 1.15); } 60% { transform: scale(1.05, 0.95); } 100% { transform: scale(1); } }
 @keyframes wiggle { 0%,100% { transform: rotate(0); } 25% { transform: rotate(6deg); } 75% { transform: rotate(-6deg); } }
-@keyframes nod { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+@keyframes nod { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
 @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1, 0.96); } }
 
-@keyframes float-up { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 0.9; } 80% { opacity: 0.5; } 100% { transform: translateY(-14px); opacity: 0; } }
+@keyframes float-up { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 0.9; } 80% { opacity: 0.5; } 100% { transform: translateY(-10px); opacity: 0; } }
 @keyframes stretch { 0% { transform: scale(0.9, 1.1); } 30% { transform: scale(1.08, 0.92); } 60% { transform: scale(0.97, 1.03); } 100% { transform: scale(1, 1); } }
-@keyframes carry { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
-@keyframes drowsy { 0%,100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(2px) rotate(-2deg); } 70% { transform: translateY(-1px) rotate(1deg); } }
-@keyframes peek { 0%,100% { transform: translateY(0); } 15% { transform: translateY(-5px); } 30% { transform: translateY(0); } 45% { transform: translateY(-3px); } 60% { transform: translateY(0); } }
+@keyframes carry { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-2px); } 75% { transform: translateX(2px); } }
+@keyframes drowsy { 0%,100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(1px) rotate(-2deg); } 70% { transform: translateY(-1px) rotate(1deg); } }
+@keyframes peek { 0%,100% { transform: translateY(0); } 15% { transform: translateY(-3px); } 30% { transform: translateY(0); } 45% { transform: translateY(-2px); } 60% { transform: translateY(0); } }
 @keyframes bubble { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
 
 .note-float { animation: float-up 1.6s ease-out forwards; }
@@ -62,7 +62,7 @@ body { background: transparent; overflow: visible; width: 160px; height: 240px; 
   <div id="heatOverlay"></div>
   <div id="zzz">Zzz</div>
 
-  <svg viewBox="0 0 120 160" width="120" height="160" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 120 160" width="75" height="100" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
         <stop offset="0%" stop-color="#ffdd44"/>

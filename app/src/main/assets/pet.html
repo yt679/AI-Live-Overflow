@@ -65,9 +65,9 @@ body { background: transparent; overflow: visible; width: 100px; height: 150px; 
   <svg viewBox="0 0 120 160" width="75" height="100" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffdd44"/>
-        <stop offset="50%" stop-color="#ff8800"/>
-        <stop offset="100%" stop-color="#cc4400"/>
+        <stop offset="0%" stop-color="#ff9922"/>
+        <stop offset="50%" stop-color="#cc5500"/>
+        <stop offset="100%" stop-color="#882200"/>
       </radialGradient>
       <radialGradient id="skullGrad" cx="50%" cy="40%" r="50%">
         <stop offset="0%" stop-color="#f0e8dc"/>
@@ -273,7 +273,7 @@ function setExpression(expr) {
 
   switch (expr) {
     case 'happy':
-      setEyes('#ffcc00', 3, 4.5, 1);
+      setEyes('#ffbb00', 3, 4.5, 1);
       pet.classList.add('tilt-right');
       setTimeout(function() { pet.classList.remove('tilt-right'); }, 1000);
       break;
@@ -287,37 +287,37 @@ function setExpression(expr) {
       playAnimation('flinch');
       break;
     case 'sleep':
-      setEyes('#664400', 1.5, 1.5, 0.4);
+      setEyes('#332200', 1.5, 1.5, 0.3);
       zzz.classList.add('show');
       pet.classList.add('sleep');
       break;
     case 'wake':
-      setEyes('#ffaa66', 3.5, 3.5, 0.7);
+      setEyes('#cc6600', 3.5, 3.5, 0.7);
       pet.classList.add('wake');
       setTimeout(function() { pet.classList.remove('wake'); }, 800);
       break;
     case 'peek':
-      setEyes('#ffcc44', 4, 4, 0.8);
+      setEyes('#cc6600', 4, 4, 0.7);
       pet.classList.add('peek');
       break;
     case 'bubble':
-      setEyes('#88aacc', 3, 3, 0.6);
+      setEyes('#6688aa', 3, 3, 0.5);
       pet.classList.add('bubble');
       break;
     case 'carry':
-      setEyes('#ffaa66', 3, 3.5, 0.7);
+      setEyes('#cc6600', 3, 3.5, 0.7);
       pet.classList.add('carry');
       break;
     case 'drowsy':
-      setEyes('#664400', 1.5, 1.5, 0.5);
+      setEyes('#553300', 1.5, 1.5, 0.4);
       pet.classList.add('drowsy');
       break;
     case 'shocked':
-      setEyes('#ffee00', 5.5, 5.5, 1);
+      setEyes('#ffcc00', 5.5, 5.5, 1);
       playAnimation('flinch');
       break;
     case 'sad':
-      setEyes('#6688aa', 2.5, 3, 0.6);
+      setEyes('#446688', 2.5, 3, 0.5);
       pet.classList.add('tilt-tiny-left');
       setTimeout(function() { pet.classList.remove('tilt-tiny-left'); }, 1500);
       break;
@@ -325,23 +325,23 @@ function setExpression(expr) {
       setEyes('#ff4400', 5, 5, 1);
       break;
     case 'soft':
-      setEyes('#ffaa66', 3.5, 3.5, 0.7);
+      setEyes('#cc6600', 3.5, 3.5, 0.6);
       break;
     case 'curious':
-      setEyes('#ffcc44', 4.5, 4.5, 1);
+      setEyes('#ffaa00', 4.5, 4.5, 1);
       pet.classList.add('tilt-tiny-right');
       setTimeout(function() { pet.classList.remove('tilt-tiny-right'); }, 1500);
       break;
     case 'smug':
-      setEyes('#ffaa00', 2, 3.5, 1);
+      setEyes('#ff8800', 2, 3.5, 1);
       pet.classList.add('tilt-tiny-left');
       setTimeout(function() { pet.classList.remove('tilt-tiny-left'); }, 1500);
       break;
     case 'deadpan':
-      setEyes('#ff8800', 3, 2, 0.9);
+      setEyes('#cc5500', 3, 2, 0.8);
       break;
     case 'surprised':
-      setEyes('#ffee00', 5.5, 5.5, 1);
+      setEyes('#ffcc00', 5.5, 5.5, 1);
       playAnimation('flinch');
       break;
     case 'normal':

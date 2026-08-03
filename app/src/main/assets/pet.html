@@ -5,92 +5,49 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body {
-    width: 100%; height: 100%;
-    background: transparent;
-    overflow: hidden;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-  .container {
-    width: 100%; height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-  .pet {
-    width: 120px;
-    height: 160px;
-    transition: transform 0.3s ease;
-  }
+  html, body { width: 100%; height: 100%; background: transparent; overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
+  .container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
+  .pet { width: 120px; height: 160px; transition: transform 0.3s ease; }
   .pet.tilt-left  { transform: rotate(-5deg); }
   .pet.tilt-right { transform: rotate(5deg); }
+  .pet.tilt-tiny-left { transform: rotate(-2deg); }
+  .pet.tilt-tiny-right { transform: rotate(2deg); }
   .pet.bounce     { animation: bounce 0.4s ease; }
   .pet.flinch     { animation: flinch 0.3s ease; }
+  .pet.wiggle     { animation: wiggle 0.5s ease; }
+  .pet.nod        { animation: nod 0.6s ease; }
   .pet.sleep      { animation: breathe 3s ease-in-out infinite; }
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-10px); }
-    60% { transform: translateY(-3px); }
-  }
-  @keyframes flinch {
-    0% { transform: scale(1); }
-    30% { transform: scale(0.9); }
-    60% { transform: scale(1.06); }
-    100% { transform: scale(1); }
-  }
-  @keyframes breathe {
-    0%, 100% { transform: scaleY(1); }
-    50% { transform: scaleY(0.94); }
-  }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 40%{transform:translateY(-10px)} 60%{transform:translateY(-3px)} }
+  @keyframes flinch { 0%{transform:scale(1)} 30%{transform:scale(0.9)} 60%{transform:scale(1.06)} 100%{transform:scale(1)} }
+  @keyframes wiggle { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-4deg)} 75%{transform:rotate(4deg)} }
+  @keyframes nod { 0%,100%{transform:translateY(0)} 30%{transform:translateY(3px)} 60%{transform:translateY(0)} 80%{transform:translateY(2px)} }
+  @keyframes breathe { 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(0.94)} }
+  @keyframes blink { 0%,90%,100%{opacity:1} 95%{opacity:0.1} }
   .bubble {
-    position: absolute;
-    top: -48px;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 180px;
-    padding: 7px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    line-height: 1.4;
-    font-family: sans-serif;
-    opacity: 0;
-    pointer-events: none;
+    position: absolute; top: -52px; left: 50%; transform: translateX(-50%);
+    max-width: 200px; padding: 7px 12px; border-radius: 12px;
+    font-size: 12px; line-height: 1.4; font-family: sans-serif;
+    opacity: 0; pointer-events: none;
     transition: opacity 0.3s ease, transform 0.3s ease;
-    white-space: pre-wrap;
-    word-break: break-word;
-    text-align: center;
+    white-space: pre-wrap; word-break: break-word; text-align: center;
   }
-  .bubble.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-4px);
-  }
+  .bubble.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
   .bubble.default { background: #2a2a2a; color: #ddd; border: 1px solid #444; }
   .bubble.angry   { background: #3a1a1a; color: #f88; border: 1px solid #622; }
   .bubble.soft    { background: #1a1a2a; color: #aac; border: 1px solid #335; }
   .bubble.warm    { background: #2a1a1a; color: #faa; border: 1px solid #533; }
+  .bubble.cold    { background: #1a1a24; color: #99aacc; border: 1px solid #334; }
   .heat-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    background: transparent;
-    transition: background 0.8s ease;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; background: transparent; transition: background 0.8s ease;
   }
   .zzz {
-    position: absolute;
-    top: 0;
-    right: 12px;
-    font-size: 13px;
-    color: #8899cc;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    font-family: sans-serif;
+    position: absolute; top: 0; right: 12px; font-size: 13px;
+    color: #8899cc; opacity: 0; transition: opacity 0.5s ease; font-family: sans-serif;
   }
   .zzz.show { opacity: 1; }
   .eye-glow { transition: all 0.3s ease; }
+  .blinking .eye-pupil { animation: blink 3s ease-in-out infinite; }
 </style>
 </head>
 <body>
@@ -101,13 +58,10 @@
   <svg class="pet" id="pet" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <radialGradient id="skullGrad" cx="45%" cy="35%" r="50%">
-        <stop offset="0%" stop-color="#faf5ee"/>
-        <stop offset="100%" stop-color="#d8cfc4"/>
+        <stop offset="0%" stop-color="#faf5ee"/><stop offset="100%" stop-color="#d8cfc4"/>
       </radialGradient>
       <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffdd44"/>
-        <stop offset="35%" stop-color="#ff8800"/>
-        <stop offset="100%" stop-color="#cc4400"/>
+        <stop offset="0%" stop-color="#ffdd44"/><stop offset="35%" stop-color="#ff8800"/><stop offset="100%" stop-color="#cc4400"/>
       </radialGradient>
       <filter id="eyeFilter" x="-60%" y="-60%" width="220%" height="220%">
         <feGaussianBlur stdDeviation="1" result="blur"/>
@@ -115,10 +69,9 @@
       </filter>
     </defs>
 
-    <!-- Ground shadow -->
     <ellipse cx="60" cy="155" rx="22" ry="4" fill="rgba(0,0,0,0.15)"/>
 
-    <!-- Boots: dark grey with lighter sole -->
+    <!-- Boots -->
     <path d="M46 150 L46 158 Q46 160 50 160 L56 160 Q60 160 60 158 L60 150 Z" fill="#3a3a44" stroke="#50505c" stroke-width="0.4"/>
     <path d="M60 150 L60 158 Q60 160 64 160 L70 160 Q74 160 74 158 L74 150 Z" fill="#3a3a44" stroke="#50505c" stroke-width="0.4"/>
     <rect x="47" y="158" width="12" height="2" rx="0.5" fill="#585864"/>
@@ -129,58 +82,60 @@
     <rect x="61" y="138" width="9" height="14" rx="3" fill="#3e3e4c"/>
 
     <!-- Body: mid-grey -->
-    <path d="M42 140 L42 130 Q42 98 44 88 L44 86 Q46 80 52 80 L68 80 Q74 80 76 86 L76 88 Q78 98 78 130 L78 140 Z"
+    <path id="body" d="M42 140 L42 130 Q42 98 44 88 L44 86 Q46 80 52 80 L68 80 Q74 80 76 86 L76 88 Q78 98 78 130 L78 140 Z"
       fill="#4e4e5c" stroke="#5e5e6e" stroke-width="0.4"/>
 
     <!-- Tactical vest: dark navy blue -->
-    <path d="M44 88 L44 84 Q42 82 44 80 L52 78 L68 78 L76 80 Q78 82 76 84 L76 88 L76 132 Q76 138 72 138 L68 138 L67 124 L63 124 L63 138 L57 138 L57 124 L53 124 L53 138 L48 138 Q44 138 44 132 Z"
+    <path id="vest" d="M44 88 L44 84 Q42 82 44 80 L52 78 L68 78 L76 80 Q78 82 76 84 L76 88 L76 132 Q76 138 72 138 L68 138 L67 124 L63 124 L63 138 L57 138 L57 124 L53 124 L53 138 L48 138 Q44 138 44 132 Z"
       fill="#2a3040" stroke="#3a4050" stroke-width="0.4"/>
 
     <!-- Vest seam lines -->
-    <line x1="46" y1="84" x2="46" y2="134" stroke="#3a4050" stroke-width="0.3" stroke-dasharray="2,2"/>
-    <line x1="74" y1="84" x2="74" y2="134" stroke="#3a4050" stroke-width="0.3" stroke-dasharray="2,2"/>
+    <line id="vestSeamL" x1="46" y1="84" x2="46" y2="134" stroke="#3a4050" stroke-width="0.3" stroke-dasharray="2,2"/>
+    <line id="vestSeamR" x1="74" y1="84" x2="74" y2="134" stroke="#3a4050" stroke-width="0.3" stroke-dasharray="2,2"/>
 
     <!-- Vest center zipper -->
-    <line x1="60" y1="80" x2="60" y2="136" stroke="#3a4050" stroke-width="0.4" stroke-dasharray="1,1"/>
+    <line id="vestZip" x1="60" y1="80" x2="60" y2="136" stroke="#3a4050" stroke-width="0.4" stroke-dasharray="1,1"/>
 
     <!-- Vest collar -->
-    <path d="M44 80 Q46 76 52 76 L68 76 Q74 76 76 80" fill="none" stroke="#3a4050" stroke-width="0.5"/>
+    <path id="vestCollar" d="M44 80 Q46 76 52 76 L68 76 Q74 76 76 80" fill="none" stroke="#3a4050" stroke-width="0.5"/>
 
-    <!-- Vest pockets left -->
-    <rect x="48" y="92" width="8" height="10" rx="2" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
-    <path d="M47 93 Q52 90 57 93" fill="none" stroke="#3a4050" stroke-width="0.3"/>
+    <!-- Vest pockets group -->
+    <g id="vestPockets">
+      <rect x="48" y="92" width="8" height="10" rx="2" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
+      <path d="M47 93 Q52 90 57 93" fill="none" stroke="#3a4050" stroke-width="0.3"/>
+      <rect x="64" y="92" width="8" height="10" rx="2" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
+      <path d="M63 93 Q68 90 73 93" fill="none" stroke="#3a4050" stroke-width="0.3"/>
+      <rect x="48" y="108" width="6" height="8" rx="1.5" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
+      <rect x="56" y="108" width="6" height="8" rx="1.5" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
+      <rect x="64" y="108" width="6" height="8" rx="1.5" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
+    </g>
 
-    <!-- Vest pockets right -->
-    <rect x="64" y="92" width="8" height="10" rx="2" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
-    <path d="M63 93 Q68 90 73 93" fill="none" stroke="#3a4050" stroke-width="0.3"/>
-
-    <!-- Vest mag pouches -->
-    <rect x="48" y="108" width="6" height="8" rx="1.5" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
-    <rect x="56" y="108" width="6" height="8" rx="1.5" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
-    <rect x="64" y="108" width="6" height="8" rx="1.5" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
+    <!-- Hoodie hood (hidden by default) -->
+    <path id="hood" d="M34 60 Q30 32 36 22 Q42 14 60 12 Q78 14 84 22 Q90 32 86 60 Q88 76 86 80 Q84 84 80 84 L40 84 Q36 84 34 80 Q32 76 34 60 Z"
+      fill="none" stroke="none" stroke-width="0"/>
 
     <!-- Left arm -->
-    <path d="M44 86 Q34 88 30 96 Q28 104 30 112 Q30 116 34 118 L38 118 Q42 118 44 114"
+    <path id="armL" d="M44 86 Q34 88 30 96 Q28 104 30 112 Q30 116 34 118 L38 118 Q42 118 44 114"
       fill="#4e4e5c" stroke="#5e5e6e" stroke-width="0.3"/>
     <path d="M30 96 Q28 98 30 100" fill="none" stroke="#5e5e6e" stroke-width="0.4"/>
 
     <!-- Left hand -->
-    <path d="M30 112 Q24 114 22 118 Q20 122 24 124 Q26 124 28 122 L30 124 Q32 126 34 124 Q36 126 38 122 Q40 120 38 118 Q36 116 34 114 Z"
+    <path id="handL" d="M30 112 Q24 114 22 118 Q20 122 24 124 Q26 124 28 122 L30 124 Q32 126 34 124 Q36 126 38 122 Q40 120 38 118 Q36 116 34 114 Z"
       fill="#4e4e5c" stroke="#5e5e6e" stroke-width="0.3"/>
     <rect x="24" y="120" width="10" height="2" rx="1" fill="#3e3e4c"/>
 
     <!-- Right arm -->
-    <path d="M76 86 Q86 88 90 96 Q92 104 90 112 Q90 116 86 118 L82 118 Q78 118 76 114"
+    <path id="armR" d="M76 86 Q86 88 90 96 Q92 104 90 112 Q90 116 86 118 L82 118 Q78 118 76 114"
       fill="#4e4e5c" stroke="#5e5e6e" stroke-width="0.3"/>
     <path d="M90 96 Q92 98 90 100" fill="none" stroke="#5e5e6e" stroke-width="0.4"/>
 
     <!-- Right hand -->
-    <path d="M90 112 Q96 114 98 118 Q100 122 96 124 Q94 124 92 122 L90 124 Q88 126 86 124 Q84 126 82 122 Q80 120 82 118 Q84 116 86 114 Z"
+    <path id="handR" d="M90 112 Q96 114 98 118 Q100 122 96 124 Q94 124 92 122 L90 124 Q88 126 86 124 Q84 126 82 122 Q80 120 82 118 Q84 116 86 114 Z"
       fill="#4e4e5c" stroke="#5e5e6e" stroke-width="0.3"/>
     <rect x="86" y="120" width="10" height="2" rx="1" fill="#3e3e4c"/>
 
     <!-- Head: balaclava base -->
-    <path d="M34 60 Q32 28 60 18 Q88 28 86 60 Q88 78 86 82 Q84 86 80 86 L40 86 Q36 86 34 82 Q32 78 34 60 Z"
+    <path id="head" d="M34 60 Q32 28 60 18 Q88 28 86 60 Q88 78 86 82 Q84 86 80 86 L40 86 Q36 86 34 82 Q32 78 34 60 Z"
       fill="#3e3e4c" stroke="#4e4e5e" stroke-width="0.4"/>
 
     <!-- Balaclava fabric folds -->
@@ -189,49 +144,40 @@
     <path d="M36 56 Q38 58 36 62" fill="none" stroke="#4e4e5e" stroke-width="0.3" stroke-linecap="round"/>
     <path d="M84 56 Q82 58 84 62" fill="none" stroke="#4e4e5e" stroke-width="0.3" stroke-linecap="round"/>
 
-    <!-- Skull mask: organic bone shape, not a simple ellipse -->
-    <!-- Wide at cheekbones, narrower at temples, defined jaw -->
-    <path d="M44 48 Q42 38 46 32 Q50 26 56 24 Q60 23 64 24 Q70 26 74 32 Q78 38 76 48
-      L76 56 Q78 64 74 68 Q72 72 68 76 Q64 78 60 78 Q58 78 56 76 Q52 72 50 68 Q46 64 48 60 Q44 56 44 52 Z"
+    <!-- Skull mask -->
+    <path id="skull" d="M44 48 Q42 38 46 32 Q50 26 56 24 Q60 23 64 24 Q70 26 74 32 Q78 38 76 48 L76 56 Q78 64 74 68 Q72 72 68 76 Q64 78 60 78 Q58 78 56 76 Q52 72 50 68 Q46 64 48 60 Q44 56 44 52 Z"
       fill="url(#skullGrad)" stroke="#c4b8a8" stroke-width="0.5"/>
 
-    <!-- Skull natural bone texture: subtle ridge lines -->
     <path d="M48 38 Q54 36 60 36" fill="none" stroke="#e0d6c8" stroke-width="0.3"/>
     <path d="M60 36 Q66 36 72 38" fill="none" stroke="#e0d6c8" stroke-width="0.3"/>
 
-    <!-- Eye sockets: angular, not perfectly round, angled for intensity -->
-    <path id="eyeL" d="M46 50 Q48 44 53 42 Q56 42 58 46 Q60 50 58 54 Q56 58 53 58 Q48 58 46 54 Z"
-      fill="#080808"/>
-    <path id="eyeR" d="M62 46 Q64 42 67 42 Q70 44 72 50 Q74 54 72 58 Q68 58 64 54 Q62 50 62 46 Z"
-      fill="#080808"/>
+    <!-- Eye sockets -->
+    <path id="eyeL" d="M46 50 Q48 44 53 42 Q56 42 58 46 Q60 50 58 54 Q56 58 53 58 Q48 58 46 54 Z" fill="#080808"/>
+    <path id="eyeR" d="M62 46 Q64 42 67 42 Q70 44 72 50 Q74 54 72 58 Q68 58 64 54 Q62 50 62 46 Z" fill="#080808"/>
 
-    <!-- Glowing amber pupils -->
-    <ellipse class="eye-glow" id="eyeLeft" cx="53" cy="50" rx="3.5" ry="4"
-      fill="url(#eyeGlow)" filter="url(#eyeFilter)" opacity="1"/>
-    <ellipse class="eye-glow" id="eyeRight" cx="67" cy="50" rx="3.5" ry="4"
-      fill="url(#eyeGlow)" filter="url(#eyeFilter)" opacity="1"/>
+    <!-- Glowing pupils -->
+    <ellipse class="eye-glow eye-pupil" id="eyeLeft" cx="53" cy="50" rx="3.5" ry="4" fill="url(#eyeGlow)" filter="url(#eyeFilter)" opacity="1"/>
+    <ellipse class="eye-glow eye-pupil" id="eyeRight" cx="67" cy="50" rx="3.5" ry="4" fill="url(#eyeGlow)" filter="url(#eyeFilter)" opacity="1"/>
 
     <!-- Eye sparkle -->
-    <ellipse cx="50.5" cy="48" rx="1.4" ry="1.4" fill="#fff" opacity="0.85"/>
-    <ellipse cx="64.5" cy="48" rx="1.4" ry="1.4" fill="#fff" opacity="0.85"/>
+    <ellipse id="sparkL" cx="50.5" cy="48" rx="1.4" ry="1.4" fill="#fff" opacity="0.85"/>
+    <ellipse id="sparkR" cx="64.5" cy="48" rx="1.4" ry="1.4" fill="#fff" opacity="0.85"/>
 
-    <!-- Brow ridge: subtle bone ridge above eyes -->
+    <!-- Brow ridge -->
     <path d="M46 48 Q50 44 56 42" fill="none" stroke="#d0c6b8" stroke-width="0.3" stroke-linecap="round"/>
     <path d="M64 42 Q70 44 74 48" fill="none" stroke="#d0c6b8" stroke-width="0.3" stroke-linecap="round"/>
 
-    <!-- Nose cavity: natural bone opening -->
+    <!-- Nose cavity -->
     <path d="M58 62 Q58 58 60 57 Q62 58 62 62 Q62 66 60 68 Q58 66 58 62 Z" fill="#1a1a18"/>
 
-    <!-- Jaw: natural segmented bone line -->
+    <!-- Jaw -->
     <path d="M46 62 Q48 66 52 68" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
     <path d="M54 68 Q56 70 58 72" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
     <path d="M62 72 Q64 70 66 68" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
     <path d="M68 68 Q72 66 74 62" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
-
-    <!-- Natural jaw plate gap: the vertical split in the middle of the jaw -->
     <path d="M60 70 L60 78" fill="none" stroke="#c4b8a8" stroke-width="0.5" stroke-linecap="round"/>
 
-    <!-- Teeth: small vertical strokes at jawline -->
+    <!-- Teeth -->
     <line x1="50" y1="66" x2="50" y2="70" stroke="#ccc0b0" stroke-width="0.4"/>
     <line x1="54" y1="68" x2="54" y2="72" stroke="#ccc0b0" stroke-width="0.4"/>
     <line x1="58" y1="70" x2="58" y2="74" stroke="#ccc0b0" stroke-width="0.4"/>
@@ -247,8 +193,11 @@ const heatOverlay = document.getElementById('heatOverlay');
 const zzz = document.getElementById('zzz');
 const eyeLeft = document.getElementById('eyeLeft');
 const eyeRight = document.getElementById('eyeRight');
+const sparkL = document.getElementById('sparkL');
+const sparkR = document.getElementById('sparkR');
 
 let currentState = 'idle';
+let currentOutfit = 'default';
 let heat = 0;
 let idleMinutes = 0;
 let bubbleTimer = null;
@@ -264,8 +213,8 @@ function hideBubble() { bubble.classList.remove('show'); }
 function setEyes(glowFill, glowRx, glowRy, glowOpacity) {
   [eyeLeft, eyeRight].forEach(function(e) {
     e.setAttribute('fill', glowFill || 'url(#eyeGlow)');
-    e.setAttribute('rx', glowRx || 3.5);
-    e.setAttribute('ry', glowRy || 4);
+    e.setAttribute('rx', glowRx != null ? glowRx : 3.5);
+    e.setAttribute('ry', glowRy != null ? glowRy : 4);
     e.setAttribute('opacity', glowOpacity != null ? glowOpacity : '1');
   });
 }
@@ -276,12 +225,14 @@ function setHeat(value) {
 function decayHeat() {
   if (heat > 0) { setHeat(heat - 1); setTimeout(decayHeat, 30000); }
 }
+
 var animating = false;
 function playAnimation(name) {
   if (animating) return;
   animating = true;
   pet.classList.add(name);
-  setTimeout(function() { pet.classList.remove(name); animating = false; }, name === 'sleep' ? 3000 : 400);
+  var duration = name === 'sleep' ? 3000 : (name === 'wiggle' || name === 'nod' ? 600 : 400);
+  setTimeout(function() { pet.classList.remove(name); animating = false; }, duration);
 }
 
 function setExpression(expr) {
@@ -313,12 +264,156 @@ function setExpression(expr) {
     case 'soft':
       setEyes('#ffaa66', 3.5, 3.5, 0.7);
       break;
+    case 'curious':
+      setEyes('#ffcc44', 4.5, 4.5, 1);
+      pet.classList.add('tilt-tiny-right');
+      setTimeout(function() { pet.classList.remove('tilt-tiny-right'); }, 1500);
+      break;
+    case 'smug':
+      setEyes('#ffaa00', 2, 3.5, 1);
+      pet.classList.add('tilt-tiny-left');
+      setTimeout(function() { pet.classList.remove('tilt-tiny-left'); }, 1500);
+      break;
+    case 'deadpan':
+      setEyes('#ff8800', 3, 2, 0.9);
+      break;
+    case 'surprised':
+      setEyes('#ffee00', 5.5, 5.5, 1);
+      playAnimation('flinch');
+      break;
     default:
       setEyes('url(#eyeGlow)', 3.5, 4, 1);
       zzz.classList.remove('show');
       pet.classList.remove('sleep');
   }
   currentState = expr;
+  idleMinutes = 0;
+}
+
+function setOutfit(name) {
+  var body = document.getElementById('body');
+  var vest = document.getElementById('vest');
+  var vestPockets = document.getElementById('vestPockets');
+  var vestSeamL = document.getElementById('vestSeamL');
+  var vestSeamR = document.getElementById('vestSeamR');
+  var vestZip = document.getElementById('vestZip');
+  var vestCollar = document.getElementById('vestCollar');
+  var armL = document.getElementById('armL');
+  var armR = document.getElementById('armR');
+  var handL = document.getElementById('handL');
+  var handR = document.getElementById('handR');
+  var hood = document.getElementById('hood');
+
+  switch (name) {
+    case 'default':
+      body.setAttribute('fill', '#4e4e5c');
+      vest.setAttribute('fill', '#2a3040');
+      vest.setAttribute('stroke', '#3a4050');
+      vestPockets.style.display = '';
+      vestSeamL.style.display = '';
+      vestSeamR.style.display = '';
+      vestZip.style.display = '';
+      vestCollar.style.display = '';
+      armL.setAttribute('fill', '#4e4e5c');
+      armR.setAttribute('fill', '#4e4e5c');
+      handL.setAttribute('fill', '#4e4e5c');
+      handR.setAttribute('fill', '#4e4e5c');
+      hood.setAttribute('fill', 'none');
+      hood.setAttribute('stroke', 'none');
+      break;
+    case 'stealth':
+      body.setAttribute('fill', '#1a1a24');
+      vest.setAttribute('fill', '#1a1a24');
+      vest.setAttribute('stroke', '#252530');
+      vestPockets.style.display = 'none';
+      vestSeamL.style.display = 'none';
+      vestSeamR.style.display = 'none';
+      vestZip.style.display = 'none';
+      vestCollar.style.display = 'none';
+      armL.setAttribute('fill', '#1a1a24');
+      armR.setAttribute('fill', '#1a1a24');
+      handL.setAttribute('fill', '#1a1a24');
+      handR.setAttribute('fill', '#1a1a24');
+      hood.setAttribute('fill', 'none');
+      hood.setAttribute('stroke', 'none');
+      break;
+    case 'hoodie':
+      body.setAttribute('fill', '#3a3a48');
+      vest.setAttribute('fill', '#3a3a48');
+      vest.setAttribute('stroke', '#4a4a5a');
+      vestPockets.style.display = 'none';
+      vestSeamL.style.display = '';
+      vestSeamR.style.display = '';
+      vestZip.style.display = '';
+      vestCollar.style.display = '';
+      armL.setAttribute('fill', '#3a3a48');
+      armR.setAttribute('fill', '#3a3a48');
+      handL.setAttribute('fill', '#3a3a48');
+      handR.setAttribute('fill', '#3a3a48');
+      hood.setAttribute('fill', '#3a3a48');
+      hood.setAttribute('stroke', '#4a4a5a');
+      hood.setAttribute('stroke-width', '0.4');
+      break;
+    case 'formal':
+      body.setAttribute('fill', '#3a3a46');
+      vest.setAttribute('fill', '#1e1e2c');
+      vest.setAttribute('stroke', '#2e2e3e');
+      vestPockets.style.display = '';
+      vestSeamL.style.display = '';
+      vestSeamR.style.display = '';
+      vestZip.style.display = '';
+      vestCollar.style.display = '';
+      armL.setAttribute('fill', '#3a3a46');
+      armR.setAttribute('fill', '#3a3a46');
+      handL.setAttribute('fill', '#3a3a46');
+      handR.setAttribute('fill', '#3a3a46');
+      hood.setAttribute('fill', 'none');
+      hood.setAttribute('stroke', 'none');
+      break;
+  }
+  currentOutfit = name;
+}
+
+// Random idle behaviors
+var idleTimer = null;
+function scheduleIdle() {
+  if (idleTimer) clearTimeout(idleTimer);
+  var delay = 8000 + Math.random() * 15000;
+  idleTimer = setTimeout(doIdleAction, delay);
+}
+function doIdleAction() {
+  if (currentState === 'sleepy') { scheduleIdle(); return; }
+  var r = Math.random();
+  if (r < 0.3) {
+    playAnimation('tilt-tiny-left');
+    setTimeout(function() { pet.classList.remove('tilt-tiny-left'); }, 800);
+  } else if (r < 0.5) {
+    playAnimation('tilt-tiny-right');
+    setTimeout(function() { pet.classList.remove('tilt-tiny-right'); }, 800);
+  } else if (r < 0.65) {
+    playAnimation('wiggle');
+  } else if (r < 0.75) {
+    playAnimation('nod');
+  }
+  scheduleIdle();
+}
+
+// Blinking
+var blinkTimer = null;
+function scheduleBlink() {
+  if (blinkTimer) clearTimeout(blinkTimer);
+  var delay = 2000 + Math.random() * 4000;
+  blinkTimer = setTimeout(doBlink, delay);
+}
+function doBlink() {
+  if (currentState === 'sleepy') { scheduleBlink(); return; }
+  [eyeLeft, eyeRight, sparkL, sparkR].forEach(function(e) { e.setAttribute('opacity', '0.1'); });
+  setTimeout(function() {
+    [eyeLeft, eyeRight, sparkL, sparkR].forEach(function(e) { e.setAttribute('opacity', '1'); });
+    sparkL.setAttribute('opacity', '0.85');
+    sparkR.setAttribute('opacity', '0.85');
+  }, 120);
+  scheduleBlink();
 }
 
 window.petEngine = {
@@ -344,7 +439,9 @@ window.petEngine = {
   },
   setExpression: function(expr) { setExpression(expr); },
   setHeat: function(value) { setHeat(value); },
-  getState: function() { return currentState; }
+  setOutfit: function(name) { setOutfit(name); },
+  getState: function() { return currentState; },
+  getOutfit: function() { return currentOutfit; }
 };
 
 setInterval(function() {
@@ -354,6 +451,8 @@ setInterval(function() {
 
 setExpression('idle');
 decayHeat();
+scheduleIdle();
+scheduleBlink();
 </script>
 </body>
 </html>

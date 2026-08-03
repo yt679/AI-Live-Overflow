@@ -100,7 +100,7 @@
   <div class="zzz" id="zzz">Zzz</div>
   <svg class="pet" id="pet" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <radialGradient id="skullGrad" cx="45%" cy="35%" r="55%">
+      <radialGradient id="skullGrad" cx="45%" cy="35%" r="50%">
         <stop offset="0%" stop-color="#faf5ee"/>
         <stop offset="100%" stop-color="#d8cfc4"/>
       </radialGradient>
@@ -118,120 +118,92 @@
     <!-- Ground shadow -->
     <ellipse cx="60" cy="155" rx="22" ry="4" fill="rgba(0,0,0,0.15)"/>
 
-    <!-- Boots: low boots, dark grey with lighter sole -->
-    <path d="M46 150 L46 158 Q46 160 50 160 L56 160 Q60 160 60 158 L60 150 Z" fill="#3a3a44" stroke="#4a4a56" stroke-width="0.4"/>
-    <path d="M60 150 L60 158 Q60 160 64 160 L70 160 Q74 160 74 158 L74 150 Z" fill="#3a3a44" stroke="#4a4a56" stroke-width="0.4"/>
-    <!-- Boot sole -->
-    <rect x="47" y="158" width="12" height="2" rx="0.5" fill="#555560"/>
-    <rect x="61" y="158" width="12" height="2" rx="0.5" fill="#555560"/>
+    <!-- Boots: dark grey with lighter sole -->
+    <path d="M46 150 L46 158 Q46 160 50 160 L56 160 Q60 160 60 158 L60 150 Z" fill="#3a3a44" stroke="#50505c" stroke-width="0.4"/>
+    <path d="M60 150 L60 158 Q60 160 64 160 L70 160 Q74 160 74 158 L74 150 Z" fill="#3a3a44" stroke="#50505c" stroke-width="0.4"/>
+    <rect x="47" y="158" width="12" height="2" rx="0.5" fill="#585864"/>
+    <rect x="61" y="158" width="12" height="2" rx="0.5" fill="#585864"/>
 
     <!-- Legs -->
-    <rect x="50" y="138" width="9" height="14" rx="3" fill="#3a3a48"/>
-    <rect x="61" y="138" width="9" height="14" rx="3" fill="#3a3a48"/>
+    <rect x="50" y="138" width="9" height="14" rx="3" fill="#3e3e4c"/>
+    <rect x="61" y="138" width="9" height="14" rx="3" fill="#3e3e4c"/>
 
-    <!-- Body: chibi torso, lighter grey so vest details pop -->
+    <!-- Body: mid-grey -->
     <path d="M42 140 L42 130 Q42 98 44 88 L44 86 Q46 80 52 80 L68 80 Q74 80 76 86 L76 88 Q78 98 78 130 L78 140 Z"
-      fill="#4a4a58" stroke="#5a5a6a" stroke-width="0.4"/>
+      fill="#4e4e5c" stroke="#5e5e6e" stroke-width="0.4"/>
 
-    <!-- Tactical vest: olive-drab / military green-grey, clearly distinct from body -->
+    <!-- Tactical vest: dark navy blue -->
     <path d="M44 88 L44 84 Q42 82 44 80 L52 78 L68 78 L76 80 Q78 82 76 84 L76 88 L76 132 Q76 138 72 138 L68 138 L67 124 L63 124 L63 138 L57 138 L57 124 L53 124 L53 138 L48 138 Q44 138 44 132 Z"
-      fill="#4a5240" stroke="#5c6450" stroke-width="0.4"/>
+      fill="#2a3040" stroke="#3a4050" stroke-width="0.4"/>
 
-    <!-- Vest stitched seam lines -->
-    <line x1="46" y1="84" x2="46" y2="134" stroke="#5c6450" stroke-width="0.3" stroke-dasharray="2,2"/>
-    <line x1="74" y1="84" x2="74" y2="134" stroke="#5c6450" stroke-width="0.3" stroke-dasharray="2,2"/>
+    <!-- Vest seam lines -->
+    <line x1="46" y1="84" x2="46" y2="134" stroke="#3a4050" stroke-width="0.3" stroke-dasharray="2,2"/>
+    <line x1="74" y1="84" x2="74" y2="134" stroke="#3a4050" stroke-width="0.3" stroke-dasharray="2,2"/>
 
-    <!-- Vest pockets left -->
-    <rect x="48" y="92" width="8" height="10" rx="2" fill="#3e4634" stroke="#5c6450" stroke-width="0.3"/>
-    <line x1="52" y1="92" x2="52" y2="102" stroke="#5c6450" stroke-width="0.2"/>
-    <!-- Vest pocket flap left -->
-    <path d="M47 93 Q52 90 57 93" fill="none" stroke="#5c6450" stroke-width="0.3"/>
-
-    <!-- Vest pockets right -->
-    <rect x="64" y="92" width="8" height="10" rx="2" fill="#3e4634" stroke="#5c6450" stroke-width="0.3"/>
-    <line x1="68" y1="92" x2="68" y2="102" stroke="#5c6450" stroke-width="0.2"/>
-    <!-- Vest pocket flap right -->
-    <path d="M63 93 Q68 90 73 93" fill="none" stroke="#5c6450" stroke-width="0.3"/>
-
-    <!-- Vest mag pouches: three distinct pouches -->
-    <rect x="48" y="108" width="6" height="8" rx="1.5" fill="#3e4634" stroke="#5c6450" stroke-width="0.3"/>
-    <rect x="56" y="108" width="6" height="8" rx="1.5" fill="#3e4634" stroke="#5c6450" stroke-width="0.3"/>
-    <rect x="64" y="108" width="6" height="8" rx="1.5" fill="#3e4634" stroke="#5c6450" stroke-width="0.3"/>
-
-    <!-- Vest center zipper line -->
-    <line x1="60" y1="80" x2="60" y2="136" stroke="#5c6450" stroke-width="0.4" stroke-dasharray="1,1"/>
+    <!-- Vest center zipper -->
+    <line x1="60" y1="80" x2="60" y2="136" stroke="#3a4050" stroke-width="0.4" stroke-dasharray="1,1"/>
 
     <!-- Vest collar -->
-    <path d="M44 80 Q46 76 52 76 L68 76 Q74 76 76 80" fill="none" stroke="#5c6450" stroke-width="0.5"/>
+    <path d="M44 80 Q46 76 52 76 L68 76 Q74 76 76 80" fill="none" stroke="#3a4050" stroke-width="0.5"/>
 
-    <!-- Left arm: curved -->
+    <!-- Vest pockets left -->
+    <rect x="48" y="92" width="8" height="10" rx="2" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
+    <path d="M47 93 Q52 90 57 93" fill="none" stroke="#3a4050" stroke-width="0.3"/>
+
+    <!-- Vest pockets right -->
+    <rect x="64" y="92" width="8" height="10" rx="2" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
+    <path d="M63 93 Q68 90 73 93" fill="none" stroke="#3a4050" stroke-width="0.3"/>
+
+    <!-- Vest mag pouches -->
+    <rect x="48" y="108" width="6" height="8" rx="1.5" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
+    <rect x="56" y="108" width="6" height="8" rx="1.5" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
+    <rect x="64" y="108" width="6" height="8" rx="1.5" fill="#242a38" stroke="#3a4050" stroke-width="0.3"/>
+
+    <!-- Left arm -->
     <path d="M44 86 Q34 88 30 96 Q28 104 30 112 Q30 116 34 118 L38 118 Q42 118 44 114"
-      fill="#4a4a58" stroke="#5a5a6a" stroke-width="0.3"/>
-    <!-- Left sleeve roll -->
-    <path d="M30 96 Q28 98 30 100" fill="none" stroke="#5a5a6a" stroke-width="0.4"/>
+      fill="#4e4e5c" stroke="#5e5e6e" stroke-width="0.3"/>
+    <path d="M30 96 Q28 98 30 100" fill="none" stroke="#5e5e6e" stroke-width="0.4"/>
 
-    <!-- Left hand: proper hand shape -->
+    <!-- Left hand -->
     <path d="M30 112 Q24 114 22 118 Q20 122 24 124 Q26 124 28 122 L30 124 Q32 126 34 124 Q36 126 38 122 Q40 120 38 118 Q36 116 34 114 Z"
-      fill="#4a4a58" stroke="#5a5a6a" stroke-width="0.3"/>
-    <!-- Left hand glove knuckle plate -->
-    <rect x="24" y="120" width="10" height="2" rx="1" fill="#3a3a48"/>
+      fill="#4e4e5c" stroke="#5e5e6e" stroke-width="0.3"/>
+    <rect x="24" y="120" width="10" height="2" rx="1" fill="#3e3e4c"/>
 
-    <!-- Right arm: curved -->
+    <!-- Right arm -->
     <path d="M76 86 Q86 88 90 96 Q92 104 90 112 Q90 116 86 118 L82 118 Q78 118 76 114"
-      fill="#4a4a58" stroke="#5a5a6a" stroke-width="0.3"/>
-    <!-- Right sleeve roll -->
-    <path d="M90 96 Q92 98 90 100" fill="none" stroke="#5a5a6a" stroke-width="0.4"/>
+      fill="#4e4e5c" stroke="#5e5e6e" stroke-width="0.3"/>
+    <path d="M90 96 Q92 98 90 100" fill="none" stroke="#5e5e6e" stroke-width="0.4"/>
 
-    <!-- Right hand: proper hand shape -->
+    <!-- Right hand -->
     <path d="M90 112 Q96 114 98 118 Q100 122 96 124 Q94 124 92 122 L90 124 Q88 126 86 124 Q84 126 82 122 Q80 120 82 118 Q84 116 86 114 Z"
-      fill="#4a4a58" stroke="#5a5a6a" stroke-width="0.3"/>
-    <!-- Right hand glove knuckle plate -->
-    <rect x="86" y="120" width="10" height="2" rx="1" fill="#3a3a48"/>
+      fill="#4e4e5c" stroke="#5e5e6e" stroke-width="0.3"/>
+    <rect x="86" y="120" width="10" height="2" rx="1" fill="#3e3e4c"/>
 
-    <!-- Head: big chibi head, balaclava base -->
+    <!-- Head: balaclava base -->
     <path d="M34 60 Q32 28 60 18 Q88 28 86 60 Q88 78 86 82 Q84 86 80 86 L40 86 Q36 86 34 82 Q32 78 34 60 Z"
-      fill="#3a3a48" stroke="#4a4a5a" stroke-width="0.4"/>
+      fill="#3e3e4c" stroke="#4e4e5e" stroke-width="0.4"/>
 
-    <!-- Balaclava texture: fabric fold lines -->
-    <path d="M38 42 Q36 44 36 48" fill="none" stroke="#4a4a5a" stroke-width="0.5" stroke-linecap="round"/>
-    <path d="M82 42 Q84 44 84 48" fill="none" stroke="#4a4a5a" stroke-width="0.5" stroke-linecap="round"/>
-    <path d="M36 56 Q38 58 36 62" fill="none" stroke="#4a4a5a" stroke-width="0.3" stroke-linecap="round"/>
-    <path d="M84 56 Q82 58 84 62" fill="none" stroke="#4a4a5a" stroke-width="0.3" stroke-linecap="round"/>
+    <!-- Balaclava fabric folds -->
+    <path d="M38 42 Q36 44 36 48" fill="none" stroke="#4e4e5e" stroke-width="0.5" stroke-linecap="round"/>
+    <path d="M82 42 Q84 44 84 48" fill="none" stroke="#4e4e5e" stroke-width="0.5" stroke-linecap="round"/>
+    <path d="M36 56 Q38 58 36 62" fill="none" stroke="#4e4e5e" stroke-width="0.3" stroke-linecap="round"/>
+    <path d="M84 56 Q82 58 84 62" fill="none" stroke="#4e4e5e" stroke-width="0.3" stroke-linecap="round"/>
 
-    <!-- Skull mask: bone plate, slightly less round, more angular -->
-    <path d="M44 52 Q42 40 48 34 Q52 28 60 26 Q68 28 72 34 Q78 40 76 52
-      L76 72 Q76 78 72 80 Q68 82 64 82 L56 82 Q52 82 48 80 Q44 78 44 72 Z"
+    <!-- Skull mask: organic bone shape, not a simple ellipse -->
+    <!-- Wide at cheekbones, narrower at temples, defined jaw -->
+    <path d="M44 48 Q42 38 46 32 Q50 26 56 24 Q60 23 64 24 Q70 26 74 32 Q78 38 76 48
+      L76 56 Q78 64 74 68 Q72 72 68 76 Q64 78 60 78 Q58 78 56 76 Q52 72 50 68 Q46 64 48 60 Q44 56 44 52 Z"
       fill="url(#skullGrad)" stroke="#c4b8a8" stroke-width="0.5"/>
 
-    <!-- Skull mask: subtle texture lines -->
-    <path d="M48 40 Q54 38 60 38" fill="none" stroke="#e0d6c8" stroke-width="0.3"/>
-    <path d="M60 38 Q66 38 72 40" fill="none" stroke="#e0d6c8" stroke-width="0.3"/>
+    <!-- Skull natural bone texture: subtle ridge lines -->
+    <path d="M48 38 Q54 36 60 36" fill="none" stroke="#e0d6c8" stroke-width="0.3"/>
+    <path d="M60 36 Q66 36 72 38" fill="none" stroke="#e0d6c8" stroke-width="0.3"/>
 
-    <!-- Cheekbone contours -->
-    <path d="M44 56 Q42 54 44 48" fill="none" stroke="#ccc0b0" stroke-width="1" stroke-linecap="round"/>
-    <path d="M76 56 Q78 54 76 48" fill="none" stroke="#ccc0b0" stroke-width="1" stroke-linecap="round"/>
-
-    <!-- Skull CRACKS: multiple cracks radiating from jaw and cheeks -->
-    <!-- Main crack from left cheekbone -->
-    <path d="M44 50 L42 46 L44 42 L42 38" fill="none" stroke="#b8a898" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"/>
-    <!-- Crack branching from left cheekbone -->
-    <path d="M44 50 L46 46" fill="none" stroke="#b8a898" stroke-width="0.4" stroke-linecap="round"/>
-    <!-- Crack from right cheekbone -->
-    <path d="M76 50 L78 46 L76 42" fill="none" stroke="#b8a898" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"/>
-    <!-- Crack from right cheekbone branch -->
-    <path d="M76 46 L74 42" fill="none" stroke="#b8a898" stroke-width="0.4" stroke-linecap="round"/>
-    <!-- Crack from top of mask -->
-    <path d="M56 28 L54 24 L56 20" fill="none" stroke="#b8a898" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M56 28 L58 30" fill="none" stroke="#b8a898" stroke-width="0.35" stroke-linecap="round"/>
-    <!-- Crack from jaw area -->
-    <path d="M50 74 L48 78 L50 82" fill="none" stroke="#b8a898" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M70 74 L72 78 L70 82" fill="none" stroke="#b8a898" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <!-- Small chip crack on forehead -->
-    <path d="M64 30 L66 26 L64 24" fill="none" stroke="#b8a898" stroke-width="0.4" stroke-linecap="round"/>
-
-    <!-- Eye sockets: dark pits -->
-    <ellipse id="eyeL" cx="53" cy="50" rx="7" ry="8" fill="#080808" transform="rotate(-2 53 50)"/>
-    <ellipse id="eyeR" cx="67" cy="50" rx="7" ry="8" fill="#080808" transform="rotate(2 67 50)"/>
+    <!-- Eye sockets: angular, not perfectly round, angled for intensity -->
+    <path id="eyeL" d="M46 50 Q48 44 53 42 Q56 42 58 46 Q60 50 58 54 Q56 58 53 58 Q48 58 46 54 Z"
+      fill="#080808"/>
+    <path id="eyeR" d="M62 46 Q64 42 67 42 Q70 44 72 50 Q74 54 72 58 Q68 58 64 54 Q62 50 62 46 Z"
+      fill="#080808"/>
 
     <!-- Glowing amber pupils -->
     <ellipse class="eye-glow" id="eyeLeft" cx="53" cy="50" rx="3.5" ry="4"
@@ -243,34 +215,29 @@
     <ellipse cx="50.5" cy="48" rx="1.4" ry="1.4" fill="#fff" opacity="0.85"/>
     <ellipse cx="64.5" cy="48" rx="1.4" ry="1.4" fill="#fff" opacity="0.85"/>
 
-    <!-- Eye socket rim highlight -->
-    <path d="M46 50 Q46 42 53 42" fill="none" stroke="#b8a898" stroke-width="0.4" stroke-linecap="round"/>
-    <path d="M74 50 Q74 42 67 42" fill="none" stroke="#b8a898" stroke-width="0.4" stroke-linecap="round"/>
+    <!-- Brow ridge: subtle bone ridge above eyes -->
+    <path d="M46 48 Q50 44 56 42" fill="none" stroke="#d0c6b8" stroke-width="0.3" stroke-linecap="round"/>
+    <path d="M64 42 Q70 44 74 48" fill="none" stroke="#d0c6b8" stroke-width="0.3" stroke-linecap="round"/>
 
-    <!-- Nose cavity -->
-    <ellipse cx="60" cy="62" rx="2.5" ry="1.8" fill="#1a1a18"/>
-    <!-- Nose bridge shadow -->
-    <path d="M58 48 Q60 52 58 58" fill="none" stroke="#d0c6b8" stroke-width="0.3" stroke-linecap="round"/>
+    <!-- Nose cavity: natural bone opening -->
+    <path d="M58 62 Q58 58 60 57 Q62 58 62 62 Q62 66 60 68 Q58 66 58 62 Z" fill="#1a1a18"/>
 
-    <!-- Jaw line: segmented skull jaw, with gaps -->
-    <path d="M46 68 Q50 70 52 70" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
-    <path d="M54 70 Q56 72 58 72" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
-    <path d="M62 72 Q64 72 66 70" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
-    <path d="M68 70 Q70 70 74 68" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
+    <!-- Jaw: natural segmented bone line -->
+    <path d="M46 62 Q48 66 52 68" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
+    <path d="M54 68 Q56 70 58 72" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
+    <path d="M62 72 Q64 70 66 68" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
+    <path d="M68 68 Q72 66 74 62" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
 
-    <!-- Vertical jaw crack -->
-    <line x1="60" y1="72" x2="60" y2="78" stroke="#c4b8a8" stroke-width="0.5" stroke-linecap="round"/>
-    <!-- Jaw crack branches -->
-    <line x1="60" y1="75" x2="56" y2="77" stroke="#b8a898" stroke-width="0.4" stroke-linecap="round"/>
-    <line x1="60" y1="75" x2="64" y2="77" stroke="#b8a898" stroke-width="0.4" stroke-linecap="round"/>
+    <!-- Natural jaw plate gap: the vertical split in the middle of the jaw -->
+    <path d="M60 70 L60 78" fill="none" stroke="#c4b8a8" stroke-width="0.5" stroke-linecap="round"/>
 
-    <!-- Teeth: individual vertical lines -->
-    <line x1="50" y1="68" x2="50" y2="72" stroke="#ccc0b0" stroke-width="0.4"/>
-    <line x1="54" y1="70" x2="54" y2="73" stroke="#ccc0b0" stroke-width="0.4"/>
-    <line x1="58" y1="70" x2="58" y2="73" stroke="#ccc0b0" stroke-width="0.4"/>
-    <line x1="62" y1="70" x2="62" y2="73" stroke="#ccc0b0" stroke-width="0.4"/>
-    <line x1="66" y1="70" x2="66" y2="73" stroke="#ccc0b0" stroke-width="0.4"/>
-    <line x1="70" y1="68" x2="70" y2="72" stroke="#ccc0b0" stroke-width="0.4"/>
+    <!-- Teeth: small vertical strokes at jawline -->
+    <line x1="50" y1="66" x2="50" y2="70" stroke="#ccc0b0" stroke-width="0.4"/>
+    <line x1="54" y1="68" x2="54" y2="72" stroke="#ccc0b0" stroke-width="0.4"/>
+    <line x1="58" y1="70" x2="58" y2="74" stroke="#ccc0b0" stroke-width="0.4"/>
+    <line x1="62" y1="70" x2="62" y2="74" stroke="#ccc0b0" stroke-width="0.4"/>
+    <line x1="66" y1="68" x2="66" y2="72" stroke="#ccc0b0" stroke-width="0.4"/>
+    <line x1="70" y1="66" x2="70" y2="70" stroke="#ccc0b0" stroke-width="0.4"/>
   </svg>
 </div>
 <script>

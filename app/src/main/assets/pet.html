@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    background: transparent;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .container {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .pet {
+    width: 160px;
+    height: 200px;
+    transition: transform 0.3s ease;
+  }
+
+  .pet.tilt-left  { transform: rotate(-5deg); }
+  .pet.tilt-right { transform: rotate(5deg); }
+  .pet.bounce     { animation: bounce 0.4s ease; }
+  .pet.flinch     { animation: flinch 0.3s ease; }
+  .pet.sleep      { animation: breathe 3s ease-in-out infinite; }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-12px); }
+    60% { transform: translateY(-4px); }
+  }
+
+  @keyframes flinch {
+    0% { transform: scale(1); }
+    30% { transform: scale(0.9); }
+    60% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.96); }
+  }
+
+  .bubble {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 200px;
+    padding: 8px 14px;
+    border-radius: 14px;
+    font-size: 13px;
+    line-height: 1.4;
+    font-family: sans-serif;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    white-space: pre-wrap;
+    word-break: break-word;
+    text-align: center;
+  }
+
+  .bubble.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+  }
+
+  .bubble.default { background: #2a2a2a; color: #ddd; border: 1px solid #444; }
+  .bubble.angry   { background: #3a1a1a; color: #f88; border: 1px solid #622; }
+  .bubble.soft    { background: #1a1a2a; color: #aac; border: 1px solid #335; }
+  .bubble.warm    { background: #2a1a1a; color: #faa; border: 1px solid #533; }
+
+  .heat-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    background: transparent;
+    transition: background 0.8s ease;
+  }
+
+  .zzz {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 16px;
+    color: #888;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    font-family: sans-serif;
+  }
+  .zzz.show { opacity: 1; }
+
+  .eye-glow { transition: all 0.4s ease; }
+  .blush { opacity: 0; transition: opacity 0.4s ease; }
+</style>
+</head>
+<body>
+
+<div class="heat-overlay" id="heatOverlay"></div>
+
+<div class="container">
+  <div class="bubble default" id="bubble"></div>
+  <div class="zzz" id="zzz">Zzz</div>
+
+  <svg class="pet" id="pet" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="80" cy="190" rx="50" ry="8" fill="rgba(0,0,0,0.3)"/>
+
+    <rect x="45" y="120" width="70" height="50" rx="6" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+    <line x1="55" y1="120" x2="55" y2="105" stroke="#444" stroke-width="2"/>
+    <line x1="105" y1="120" x2="105" y2="105" stroke="#444" stroke-width="2"/>
+    <rect x="52" y="130" width="16" height="20" rx="2" fill="#222" stroke="#333" stroke-width="0.5"/>
+    <rect x="92" y="130" width="16" height="20" rx="2" fill="#222" stroke="#333" stroke-width="0.5"/>
+    <rect x="73" y="135" width="14" height="10" rx="1" fill="#444"/>
+
+    <rect x="30" y="120" width="18" height="40" rx="5" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+    <rect x="112" y="120" width="18" height="40" rx="5" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+
+    <rect x="50" y="168" width="22" height="22" rx="5" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+    <rect x="88" y="168" width="22" height="22" rx="5" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+
+    <rect x="68" y="98" width="24" height="12" fill="#222"/>
+
+    <ellipse cx="80" cy="70" rx="32" ry="36" fill="#e8e0d5" stroke="#333" stroke-width="1.5"/>
+    <path d="M55 78 Q55 100 80 102 Q105 100 105 78" fill="#e8e0d5" stroke="#333" stroke-width="1.5"/>
+    <path d="M52 68 Q60 74 65 72" fill="none" stroke="#ccc" stroke-width="1"/>
+    <path d="M108 68 Q100 74 95 72" fill="none" stroke="#ccc" stroke-width="1"/>
+
+    <ellipse cx="68" cy="70" rx="10" ry="9" fill="#111"/>
+    <ellipse class="eye-glow" id="eyeLeft" cx="68" cy="70" rx="5" ry="4" fill="#ff6600" opacity="0.9"/>
+    <ellipse id="eyeLeftCore" cx="68" cy="70" rx="2" ry="1.5" fill="#ffcc00" opacity="0.8"/>
+
+    <ellipse cx="92" cy="70" rx="10" ry="9" fill="#111"/>
+    <ellipse class="eye-glow" id="eyeRight" cx="92" cy="70" rx="5" ry="4" fill="#ff6600" opacity="0.9"/>
+    <ellipse id="eyeRightCore" cx="92" cy="70" rx="2" ry="1.5" fill="#ffcc00" opacity="0.8"/>
+
+    <path d="M76 78 L80 84 L84 78" fill="#111" stroke="none"/>
+    <line x1="70" y1="92" x2="90" y2="92" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="72" y1="92" x2="72" y2="95" stroke="#333" stroke-width="1"/>
+    <line x1="80" y1="92" x2="80" y2="95" stroke="#333" stroke-width="1"/>
+    <line x1="88" y1="92" x2="88" y2="95" stroke="#333" stroke-width="1"/>
+
+    <path d="M90 52 L86 58 L88 62" fill="none" stroke="#bbb" stroke-width="0.8"/>
+
+    <ellipse class="blush" id="blushLeft" cx="60" cy="80" rx="8" ry="4" fill="#ff6666" opacity="0"/>
+    <ellipse class="blush" id="blushRight" cx="100" cy="80" rx="8" ry="4" fill="#ff6666" opacity="0"/>
+
+    <ellipse cx="80" cy="38" rx="28" ry="8" fill="#222" stroke="#333" stroke-width="0.5" opacity="0.6"/>
+    <ellipse cx="80" cy="36" rx="18" ry="7" fill="#2a2a2a" opacity="0.5"/>
+  </svg>
+</div>
+
+<script>
+const pet = document.getElementById('pet');
+const bubble = document.getElementById('bubble');
+const heatOverlay = document.getElementById('heatOverlay');
+const zzz = document.getElementById('zzz');
+
+const eyeLeft = document.getElementById('eyeLeft');
+const eyeRight = document.getElementById('eyeRight');
+const eyeLeftCore = document.getElementById('eyeLeftCore');
+const eyeRightCore = document.getElementById('eyeRightCore');
+const blushLeft = document.getElementById('blushLeft');
+const blushRight = document.getElementById('blushRight');
+
+let currentState = 'idle';
+let heat = 0;
+let idleMinutes = 0;
+let bubbleTimer = null;
+
+function showBubble(text, style, duration) {
+  if (bubbleTimer) clearTimeout(bubbleTimer);
+  bubble.textContent = text;
+  bubble.className = 'bubble ' + (style || 'default') + ' show';
+  if (duration) {
+    bubbleTimer = setTimeout(hideBubble, duration);
+  }
+}
+
+function hideBubble() {
+  bubble.classList.remove('show');
+}
+
+function setEyes(glowColor, coreColor, glowRx, glowRy) {
+  [eyeLeft, eyeRight].forEach(function(e) {
+    e.setAttribute('fill', glowColor || '#ff6600');
+    e.setAttribute('rx', glowRx || 5);
+    e.setAttribute('ry', glowRy || 4);
+  });
+  [eyeLeftCore, eyeRightCore].forEach(function(e) {
+    e.setAttribute('fill', coreColor || '#ffcc00');
+  });
+}
+
+function setBlush(show) {
+  var op = show ? 0.6 : 0;
+  blushLeft.setAttribute('opacity', op);
+  blushRight.setAttribute('opacity', op);
+}
+
+function setHeat(value) {
+  heat = Math.max(0, Math.min(100, value));
+  var alpha = heat / 200;
+  heatOverlay.style.background = 'rgba(255, 40, 40, ' + alpha + ')';
+}
+
+function decayHeat() {
+  if (heat > 0) {
+    setHeat(heat - 1);
+    setTimeout(decayHeat, 30000);
+  }
+}
+
+var animating = false;
+
+function playAnimation(name) {
+  if (animating) return;
+  animating = true;
+  pet.classList.add(name);
+  setTimeout(function() {
+    pet.classList.remove(name);
+    animating = false;
+  }, name === 'sleep' ? 3000 : 400);
+}
+
+function setExpression(expr) {
+  switch (expr) {
+    case 'happy':
+      setEyes('#ffaa00', '#ffdd44', 6, 3);
+      setBlush(true);
+      pet.classList.add('tilt-right');
+      setTimeout(function() { pet.classList.remove('tilt-right'); }, 1000);
+      break;
+
+    case 'angry':
+      setEyes('#ff2200', '#ff6644', 4, 5);
+      setBlush(false);
+      pet.classList.add('tilt-left');
+      setTimeout(function() { pet.classList.remove('tilt-left'); }, 1000);
+      break;
+
+    case 'flustered':
+      setEyes('#ff8844', '#ffcc88', 5, 4);
+      setBlush(true);
+      playAnimation('flinch');
+      break;
+
+    case 'sleepy':
+      setEyes('#664400', '#997700', 3, 2);
+      setBlush(false);
+      zzz.classList.add('show');
+      pet.classList.add('sleep');
+      break;
+
+    case 'alert':
+      setEyes('#ff4400', '#ffffff', 7, 6);
+      setBlush(false);
+      zzz.classList.remove('show');
+      pet.classList.remove('sleep');
+      break;
+
+    case 'soft':
+      setEyes('#ffaa66', '#ffddaa', 5, 4);
+      setBlush(true);
+      break;
+
+    default:
+      setEyes('#ff6600', '#ffcc00', 5, 4);
+      setBlush(false);
+      zzz.classList.remove('show');
+      pet.classList.remove('sleep');
+  }
+  currentState = expr;
+}
+
+window.petEngine = {
+  onTap: function() {
+    idleMinutes = 0;
+    playAnimation('bounce');
+    setExpression('alert');
+    setTimeout(function() { setExpression('idle'); }, 2000);
+  },
+
+  onDoubleTap: function() {
+    idleMinutes = 0;
+    playAnimation('flinch');
+    setExpression('flustered');
+    setTimeout(function() { setExpression('idle'); }, 2500);
+  },
+
+  onLongPress: function() {
+    idleMinutes = 0;
+    setExpression('angry');
+    setTimeout(function() { setExpression('idle'); }, 3000);
+  },
+
+  say: function(text, style) {
+    showBubble(text, style || 'default', 4000);
+  },
+
+  setExpression: function(expr) {
+    setExpression(expr);
+  },
+
+  setHeat: function(value) {
+    setHeat(value);
+  },
+
+  getState: function() {
+    return currentState;
+  }
+};
+
+setInterval(function() {
+  idleMinutes++;
+  if (idleMinutes >= 30) {
+    setExpression('sleepy');
+  }
+}, 60000);
+
+setExpression('idle');
+decayHeat();
+</script>
+
+</body>
+</html>

@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: transparent; overflow: visible; width: 160px; height: 220px; display: flex; align-items: center; justify-content: center; font-family: sans-serif; position: relative; }
+body { background: transparent; overflow: visible; width: 160px; height: 240px; display: flex; align-items: center; justify-content: center; font-family: sans-serif; position: relative; }
 
 #pet { position: relative; width: 120px; height: 160px; transition: transform 0.3s ease; overflow: visible; }
 
 #heatOverlay { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; transition: background 0.8s ease; }
 
-#bubble { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); padding: 3px 10px; border-radius: 10px; font-size: 11px; white-space: nowrap; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 999; }
+#bubble { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); padding: 3px 10px; border-radius: 10px; font-size: 11px; white-space: nowrap; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 999; }
 #bubble.show { opacity: 1; }
 #bubble.default { background: #333; color: #eee; }
 #bubble.angry { background: #4a1010; color: #ff6666; }

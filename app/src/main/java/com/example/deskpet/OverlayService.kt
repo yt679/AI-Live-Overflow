@@ -1,8 +1,11 @@
 package com.example.deskpet
 
 import android.app.*
+import android.app.usage.UsageStatsManager
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.Handler
@@ -21,12 +24,23 @@ class OverlayService : Service() {
     private var overlayView: WebView? = null
     private var params: WindowManager.LayoutParams? = null
     private val handler = Handler(Looper.getMainLooper())
+    private var receiver: BroadcastReceiver? = null
+    private var appCheckRunnable: Runnable? = null
+    private var lastApp: String = "unknown"
+    private var lastOutfit: String = "default"
 
     companion object {
         private const val CHANNEL_ID = "pet_overlay_channel"
         private const val NOTIFICATION_ID = 1001
         private const val PET_SIZE_DP = 160
         private const val PET_HEIGHT_DP = 200
+        const val ACTION_PET_COMMAND = "com.example.deskpet.PET_COMMAND"
+        const val EXTRA_COMMAND = "command"
+        const val EXTRA_TEXT = "text"
+        const val EXTRA_STYLE = "style"
+        const val EXTRA_EXPRESSION = "expression"
+        const val EXTRA_HEAT = "heat"
+        const val EXTRA_OUTFIT = "outfit"
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -37,6 +51,8 @@ class OverlayService : Service() {
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, buildNotification("..."))
         setupOverlay()
+        setupReceiver()
+        startAppMonitor()
     }
 
     private fun initSupabase() {
@@ -81,6 +97,120 @@ class OverlayService : Service() {
         }
 
         windowManager?.addView(overlayView, params)
+
+        // Apply default outfit after page loads
+        handler.postDelayed({
+            overlayView?.evaluateJavascript("window.petEngine && window.petEngine.setOutfit('default')", null)
+        }, 1500)
+    }
+
+    // === BROADCAST RECEIVER ===
+
+    private fun setupReceiver() {
+        receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == ACTION_PET_COMMAND) {
+                    val cmd = intent.getStringExtra(EXTRA_COMMAND) ?: return
+                    when (cmd) {
+                        "say" -> {
+                            val text = intent.getStringExtra(EXTRA_TEXT) ?: return
+                            val style = intent.getStringExtra(EXTRA_STYLE) ?: "default"
+                            sayBubble(text, style)
+                        }
+                        "expression" -> {
+                            val expr = intent.getStringExtra(EXTRA_EXPRESSION) ?: return
+                            setExpression(expr)
+                        }
+                        "heat" -> {
+                            val heat = intent.getIntExtra(EXTRA_HEAT, 0)
+                            setHeat(heat)
+                        }
+                        "outfit" -> {
+                            val outfit = intent.getStringExtra(EXTRA_OUTFIT) ?: return
+                            setOutfit(outfit)
+                        }
+                        "combo" -> {
+                            val text = intent.getStringExtra(EXTRA_TEXT) ?: "say"
+                            val style = intent.getStringExtra(EXTRA_STYLE) ?: "default"
+                            val expr = intent.getStringExtra(EXTRA_EXPRESSION) ?: ""
+                            val outfit = intent.getStringExtra(EXTRA_OUTFIT) ?: ""
+                            if (text.isNotEmpty()) sayBubble(text, style)
+                            if (expr.isNotEmpty()) setExpression(expr)
+                            if (outfit.isNotEmpty()) setOutfit(outfit)
+                        }
+                    }
+                }
+            }
+        }
+        registerReceiver(receiver, IntentFilter(ACTION_PET_COMMAND), Context.RECEIVER_NOT_EXPORTED)
+    }
+
+    // === APP MONITOR ===
+
+    private fun startAppMonitor() {
+        appCheckRunnable = object : Runnable {
+            override fun run() {
+                checkForegroundApp()
+                handler.postDelayed(this, 2000)
+            }
+        }
+        handler.post(appCheckRunnable!!)
+    }
+
+    private fun getForegroundApp(): String? {
+        return try {
+            val usageStatsManager = getSystemService(Context.USAGE_STATS_SERVICE) as? UsageStatsManager ?: return null
+            val now = System.currentTimeMillis()
+            val stats = usageStatsManager.queryUsageStats(
+                UsageStatsManager.INTERVAL_DAILY,
+                now - 10000,
+                now
+            )
+            stats?.maxByOrNull { it.lastTimeUsed }?.packageName
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    private fun checkForegroundApp() {
+        val pkg = getForegroundApp() ?: return
+        if (pkg == lastApp) return
+        lastApp = pkg
+
+        val outfit = getOutfitForApp(pkg)
+        if (outfit != lastOutfit) {
+            lastOutfit = outfit
+            setOutfit(outfit)
+
+            val appName = when {
+                pkg.contains("bilibili") -> "B站"
+                pkg.contains("weixin") || pkg.contains("tencent.mm") -> "微信"
+                pkg.contains("qq") && !pkg.contains("qqmusic") -> "QQ"
+                pkg.contains("taobao") -> "淘宝"
+                pkg.contains("douyin") || pkg.contains("tiktok") -> "抖音"
+                pkg.contains("netflix") -> "Netflix"
+                pkg.contains("youtube") -> "YouTube"
+                pkg.contains("spotify") || pkg.contains("qqmusic") || pkg.contains("neteasemusic") -> "音乐"
+                pkg.contains("operit") || pkg.contains("muyu") || pkg.contains("shizuku") -> "系统"
+                pkg.contains("launcher") || pkg.contains("com.android") -> "桌面"
+                else -> ""
+            }
+            if (appName.isNotEmpty()) {
+                handler.postDelayed({
+                    sayBubble("$appName 啊", "soft")
+                }, 800)
+            }
+        }
+    }
+
+    private fun getOutfitForApp(pkg: String): String {
+        return when {
+            pkg.contains("launcher") || pkg.contains("com.android.launcher") -> "default"
+            pkg.contains("netflix") || pkg.contains("youtube") || pkg.contains("bilibili") -> "hoodie"
+            pkg.contains("settings") || pkg.contains("shizuku") || pkg.contains("operit") -> "stealth"
+            pkg.contains("weixin") || pkg.contains("wechat") || pkg.contains("tencent.mm") -> "formal"
+            else -> "default"
+        }
     }
 
     // === GESTURE HANDLING ===
@@ -137,7 +267,6 @@ class OverlayService : Service() {
                             }
                         }
 
-                        // Combo tracking
                         val now = System.currentTimeMillis()
                         if (now - tapCountResetTime > 2000) {
                             tapCount = 0
@@ -147,14 +276,17 @@ class OverlayService : Service() {
                         when (tapCount) {
                             3 -> {
                                 SupabaseClient.logGesture("combo_3")
+                                setExpression("angry")
                                 sayBubble("Tch.", "angry")
                             }
                             5 -> {
                                 SupabaseClient.logGesture("combo_5")
+                                setExpression("deadpan")
                                 sayBubble("Enough.", "angry")
                             }
                             8 -> {
                                 SupabaseClient.logGesture("combo_8")
+                                setExpression("soft")
                                 sayBubble("...", "soft")
                             }
                         }
@@ -182,6 +314,27 @@ class OverlayService : Service() {
         val escaped = text.replace("'", "\\'").replace("\n", "\\n")
         overlayView?.evaluateJavascript(
             "window.petEngine && window.petEngine.say('$escaped', '$style')",
+            null
+        )
+    }
+
+    private fun setExpression(expr: String) {
+        overlayView?.evaluateJavascript(
+            "window.petEngine && window.petEngine.setExpression('$expr')",
+            null
+        )
+    }
+
+    private fun setHeat(value: Int) {
+        overlayView?.evaluateJavascript(
+            "window.petEngine && window.petEngine.setHeat($value)",
+            null
+        )
+    }
+
+    private fun setOutfit(name: String) {
+        overlayView?.evaluateJavascript(
+            "window.petEngine && window.petEngine.setOutfit('$name')",
             null
         )
     }
@@ -216,13 +369,14 @@ class OverlayService : Service() {
         }
     }
 
-    // === UTILS ===
-
     private fun dpToPx(dp: Int): Int {
         return (dp * resources.displayMetrics.density).toInt()
     }
 
     override fun onDestroy() {
+        receiver?.let { unregisterReceiver(it) }
+        receiver = null
+        appCheckRunnable = null
         overlayView?.let {
             windowManager?.removeView(it)
             it.destroy()

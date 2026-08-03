@@ -2,395 +2,314 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghost Desk Pet</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body {
-    width: 100%; height: 100%;
-    background: transparent;
-    overflow: hidden;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-
-  .container {
-    width: 100%; height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-
-  /* === PET SVG === */
-  .pet {
-    width: 160px;
-    height: 200px;
-    transition: transform 0.3s ease;
-  }
-
-  .pet.tilt-left  { transform: rotate(-5deg); }
-  .pet.tilt-right { transform: rotate(5deg); }
-  .pet.bounce     { animation: bounce 0.4s ease; }
-  .pet.flinch     { animation: flinch 0.3s ease; }
-  .pet.sleep      { animation: breathe 3s ease-in-out infinite; }
-
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-12px); }
-    60% { transform: translateY(-4px); }
-  }
-
-  @keyframes flinch {
-    0% { transform: scale(1); }
-    30% { transform: scale(0.9); }
-    60% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-  }
-
-  @keyframes breathe {
-    0%, 100% { transform: scaleY(1); }
-    50% { transform: scaleY(0.96); }
-  }
-
-  /* === BUBBLE === */
-  .bubble {
-    position: absolute;
-    top: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 200px;
-    padding: 8px 14px;
-    border-radius: 14px;
-    font-size: 13px;
-    line-height: 1.4;
-    font-family: sans-serif;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    white-space: pre-wrap;
-    word-break: break-word;
-    text-align: center;
-  }
-
-  .bubble.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-4px);
-  }
-
-  .bubble.default { background: #2a2a2a; color: #ddd; border: 1px solid #444; }
-  .bubble.angry   { background: #3a1a1a; color: #f88; border: 1px solid #622; }
-  .bubble.soft    { background: #1a1a2a; color: #aac; border: 1px solid #335; }
-  .bubble.warm    { background: #2a1a1a; color: #faa; border: 1px solid #533; }
-
-  /* === SCREEN OVERLAY (heat) === */
-  .heat-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    background: transparent;
-    transition: background 0.8s ease;
-  }
-
-  /* === SLEEP Zzz === */
-  .zzz {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 16px;
-    color: #888;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    font-family: sans-serif;
-  }
-  .zzz.show { opacity: 1; }
-
-  /* === EYE GLOW PULSE === */
-  .eye-glow {
-    transition: all 0.4s ease;
-  }
-
-  /* === BLUSH === */
-  .blush {
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:transparent;overflow:hidden;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center}
+#pet{width:160px;height:200px;position:relative;cursor:pointer;transition:transform .15s ease}
+#pet.bounce{animation:bounce .3s ease}
+#pet.flinch{animation:flinch .2s ease}
+#pet.tilt{transform:rotate(-8deg)}
+@keyframes bounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-12px)}60%{transform:translateY(-4px)}}
+@keyframes flinch{0%{transform:scale(1)}40%{transform:scale(.85,.85)}70%{transform:scale(1.05,1.05)}100%{transform:scale(1)}}
+@keyframes breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.96)}}
+@keyframes zzz{0%{opacity:0;transform:translate(0,0) scale(.6)}30%{opacity:1}100%{opacity:0;transform:translate(-18px,-28px) scale(1.2)}}
+#bubble{position:absolute;top:-38px;left:50%;transform:translateX(-50%);padding:6px 12px;border-radius:14px;font-size:11px;font-family:sans-serif;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s ease}
+#bubble.show{opacity:1}
+#bubble.default{background:#3a3a3a;color:#ddd;border:1px solid #555}
+#bubble.angry{background:#4a1a1a;color:#f88;border:1px solid #822}
+#bubble.soft{background:#2a2a3a;color:#aac;border:1px solid #445}
+#bubble.warm{background:#3a2a2a;color:#fca;border:1px solid #654}
+#heat{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;background:rgba(180,20,20,0);transition:background .5s ease;z-index:9999}
 </style>
 </head>
 <body>
+<div id="heat"></div>
+<div id="bubble"></div>
+<svg id="pet" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bodyGrad" cx="50%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#4a4a52"/>
+      <stop offset="100%" stop-color="#1a1a20"/>
+    </radialGradient>
+    <radialGradient id="skullGrad" cx="50%" cy="25%" r="55%">
+      <stop offset="0%" stop-color="#f5f0e8"/>
+      <stop offset="100%" stop-color="#d4c8b8"/>
+    </radialGradient>
+    <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffcc44"/>
+      <stop offset="40%" stop-color="#ff8800"/>
+      <stop offset="100%" stop-color="#cc4400"/>
+    </radialGradient>
+    <radialGradient id="cheekFlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff8888" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#ff8888" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softShadow" x="-20%" y="-10%" width="140%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+    <filter id="eyeFilter" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
 
-<div class="heat-overlay" id="heatOverlay"></div>
+  <!-- Shadow on ground -->
+  <ellipse cx="80" cy="188" rx="42" ry="8" fill="rgba(0,0,0,0.25)"/>
 
-<div class="container">
-  <div class="bubble default" id="bubble"></div>
-  <div class="zzz" id="zzz">Zzz</div>
+  <!-- Body: cute round ghost shape -->
+  <g filter="url(#softShadow)">
+    <!-- Main body blob -->
+    <path id="bodyPath" d="M38 75 Q36 38 80 32 Q124 38 122 75 L124 155 Q122 172 108 168 Q98 158 88 168 Q80 176 72 168 Q62 158 52 168 Q38 172 38 155 Z" fill="url(#bodyGrad)"/>
+  </g>
 
-  <svg class="pet" id="pet" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
-    <!-- Shadow -->
-    <ellipse cx="80" cy="190" rx="50" ry="8" fill="rgba(0,0,0,0.3)"/>
+  <!-- Tiny hands -->
+  <ellipse cx="42" cy="108" rx="12" ry="8" fill="#2a2a32" transform="rotate(-15 42 108)"/>
+  <ellipse cx="118" cy="108" rx="12" ry="8" fill="#2a2a32" transform="rotate(15 118 108)"/>
 
-    <!-- Body: tactical vest -->
-    <rect x="45" y="120" width="70" height="50" rx="6" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
-    <!-- Vest straps -->
-    <line x1="55" y1="120" x2="55" y2="105" stroke="#444" stroke-width="2"/>
-    <line x1="105" y1="120" x2="105" y2="105" stroke="#444" stroke-width="2"/>
-    <!-- Pouches -->
-    <rect x="52" y="130" width="16" height="20" rx="2" fill="#222" stroke="#333" stroke-width="0.5"/>
-    <rect x="92" y="130" width="16" height="20" rx="2" fill="#222" stroke="#333" stroke-width="0.5"/>
-    <!-- Center buckle -->
-    <rect x="73" y="135" width="14" height="10" rx="1" fill="#444"/>
+  <!-- Hood/beanie top -->
+  <path d="M42 42 Q40 28 80 26 Q120 28 118 42 Q120 34 80 30 Q40 34 42 42Z" fill="#222228"/>
 
-    <!-- Arms -->
-    <rect x="30" y="120" width="18" height="40" rx="5" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
-    <rect x="112" y="120" width="18" height="40" rx="5" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
-
-    <!-- Legs -->
-    <rect x="50" y="168" width="22" height="22" rx="5" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
-    <rect x="88" y="168" width="22" height="22" rx="5" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
-
-    <!-- Neck -->
-    <rect x="68" y="98" width="24" height="12" fill="#222"/>
-
-    <!-- SKULL MASK -->
+  <!-- Skull mask -->
+  <g id="skullMask">
     <!-- Mask base -->
-    <ellipse cx="80" cy="70" rx="32" ry="36" fill="#e8e0d5" stroke="#333" stroke-width="1.5"/>
+    <rect x="52" y="44" width="56" height="52" rx="16" ry="14" fill="url(#skullGrad)" stroke="#b8a898" stroke-width="0.8"/>
 
-    <!-- Jaw contour -->
-    <path d="M55 78 Q55 100 80 102 Q105 100 105 78" fill="#e8e0d5" stroke="#333" stroke-width="1.5"/>
+    <!-- Skull cheekbones -->
+    <path d="M52 62 Q48 60 48 56 Q48 50 52 46" fill="none" stroke="#c8b8a4" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M108 62 Q112 60 112 56 Q112 50 108 46" fill="none" stroke="#c8b8a4" stroke-width="1.5" stroke-linecap="round"/>
 
-    <!-- Cheekbones -->
-    <path d="M52 68 Q60 74 65 72" fill="none" stroke="#ccc" stroke-width="1"/>
-    <path d="M108 68 Q100 74 95 72" fill="none" stroke="#ccc" stroke-width="1"/>
+    <!-- Eye sockets -->
+    <ellipse id="eyeL" cx="66" cy="62" rx="10" ry="11" fill="#1a1a18"/>
+    <ellipse id="eyeR" cx="94" cy="62" rx="10" ry="11" fill="#1a1a18"/>
 
-    <!-- Left eye socket -->
-    <ellipse cx="68" cy="70" rx="10" ry="9" fill="#111"/>
-    <!-- Left eye glow -->
-    <ellipse class="eye-glow" id="eyeLeft" cx="68" cy="70" rx="5" ry="4" fill="#ff6600" opacity="0.9"/>
-    <!-- Left eye core -->
-    <ellipse id="eyeLeftCore" cx="68" cy="70" rx="2" ry="1.5" fill="#ffcc00" opacity="0.8"/>
+    <!-- Glowing eyes -->
+    <ellipse id="pupilL" cx="66" cy="62" rx="5" ry="5.5" fill="url(#eyeGlow)" filter="url(#eyeFilter)"/>
+    <ellipse id="pupilR" cx="94" cy="62" rx="5" ry="5.5" fill="url(#eyeGlow)" filter="url(#eyeFilter)"/>
 
-    <!-- Right eye socket -->
-    <ellipse cx="92" cy="70" rx="10" ry="9" fill="#111"/>
-    <!-- Right eye glow -->
-    <ellipse class="eye-glow" id="eyeRight" cx="92" cy="70" rx="5" ry="4" fill="#ff6600" opacity="0.9"/>
-    <!-- Right eye core -->
-    <ellipse id="eyeRightCore" cx="92" cy="70" rx="2" ry="1.5" fill="#ffcc00" opacity="0.8"/>
+    <!-- Eye highlights -->
+    <ellipse cx="63.5" cy="60" rx="1.8" ry="1.8" fill="#fff" opacity="0.7"/>
+    <ellipse cx="91.5" cy="60" rx="1.8" ry="1.8" fill="#fff" opacity="0.7"/>
 
-    <!-- Nose cavity -->
-    <path d="M76 78 L80 84 L84 78" fill="#111" stroke="none"/>
+    <!-- Nose hole -->
+    <ellipse cx="80" cy="76" rx="3.5" ry="2.5" fill="#1a1a18"/>
 
-    <!-- Mouth line -->
-    <line x1="70" y1="92" x2="90" y2="92" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
-    <!-- Teeth hints -->
-    <line x1="72" y1="92" x2="72" y2="95" stroke="#333" stroke-width="1"/>
-    <line x1="80" y1="92" x2="80" y2="95" stroke="#333" stroke-width="1"/>
-    <line x1="88" y1="92" x2="88" y2="95" stroke="#333" stroke-width="1"/>
+    <!-- Jaw crack line -->
+    <path d="M56 84 Q64 90 80 88 Q96 90 104 84" fill="none" stroke="#b8a898" stroke-width="1" stroke-linecap="round"/>
+    <line x1="80" y1="88" x2="80" y2="96" stroke="#b8a898" stroke-width="0.8" stroke-linecap="round"/>
 
-    <!-- Mask crack detail -->
-    <path d="M90 52 L86 58 L88 62" fill="none" stroke="#bbb" stroke-width="0.8"/>
+    <!-- Teeth lines -->
+    <line x1="68" y1="84" x2="68" y2="90" stroke="#c8b8a4" stroke-width="0.6"/>
+    <line x1="76" y1="86" x2="76" y2="92" stroke="#c8b8a4" stroke-width="0.6"/>
+    <line x1="84" y1="86" x2="84" y2="92" stroke="#c8b8a4" stroke-width="0.6"/>
+    <line x1="92" y1="84" x2="92" y2="90" stroke="#c8b8a4" stroke-width="0.6"/>
+  </g>
 
-    <!-- Blush (hidden by default) -->
-    <ellipse class="blush" id="blushLeft" cx="60" cy="80" rx="8" ry="4" fill="#ff6666" opacity="0"/>
-    <ellipse class="blush" id="blushRight" cx="100" cy="80" rx="8" ry="4" fill="#ff6666" opacity="0"/>
+  <!-- Cheek blush (hidden by default) -->
+  <ellipse id="blushL" cx="56" cy="74" rx="8" ry="5" fill="url(#cheekFlush)" opacity="0"/>
+  <ellipse id="blushR" cx="104" cy="74" rx="8" ry="5" fill="url(#cheekFlush)" opacity="0"/>
 
-    <!-- Beret (optional) -->
-    <ellipse cx="80" cy="38" rx="28" ry="8" fill="#222" stroke="#333" stroke-width="0.5" opacity="0.6"/>
-    <ellipse cx="80" cy="36" rx="18" ry="7" fill="#2a2a2a" opacity="0.5"/>
-  </svg>
-</div>
+  <!-- Zzz indicator -->
+  <text id="zzz" x="100" y="30" font-size="14" font-family="sans-serif" fill="#8899cc" opacity="0" style="animation:zzz 2s ease infinite">Z</text>
+  <text id="zzz2" x="112" y="18" font-size="11" font-family="sans-serif" fill="#8899cc" opacity="0" style="animation:zzz 2s ease .4s infinite">z</text>
+  <text id="zzz3" x="120" y="8" font-size="9" font-family="sans-serif" fill="#8899cc" opacity="0" style="animation:zzz 2s ease .8s infinite">z</text>
+</svg>
 
 <script>
-// ======= PET ENGINE =======
-
+// --- State ---
 const pet = document.getElementById('pet');
 const bubble = document.getElementById('bubble');
-const heatOverlay = document.getElementById('heatOverlay');
-const zzz = document.getElementById('zzz');
+const heat = document.getElementById('heat');
+const eyeL = document.getElementById('eyeL');
+const eyeR = document.getElementById('eyeR');
+const pupilL = document.getElementById('pupilL');
+const pupilR = document.getElementById('pupilR');
+const blushL = document.getElementById('blushL');
+const blushR = document.getElementById('blushR');
+const zzzEls = [document.getElementById('zzz'), document.getElementById('zzz2'), document.getElementById('zzz3')];
 
-const eyeLeft = document.getElementById('eyeLeft');
-const eyeRight = document.getElementById('eyeRight');
-const eyeLeftCore = document.getElementById('eyeLeftCore');
-const eyeRightCore = document.getElementById('eyeRightCore');
-const blushLeft = document.getElementById('blushLeft');
-const blushRight = document.getElementById('blushRight');
+let currentMood = 'idle';
+let heatVal = 0;
+let lastInteraction = Date.now();
+let tapCount = 0;
+let tapTimer = null;
+let longPressTimer = null;
+let isDragging = false;
+let dragStart = {x:0,y:0};
 
-// ======= STATE =======
-let currentState = 'idle';
-let heat = 0;
-let idleTimer = null;
-let idleMinutes = 0;
+// --- Supabase bridge ---
+function logGesture(type, x, y) {
+  try { if (window.Android) window.Android.logGesture(type, x, y); } catch(e) {}
+}
+
+// --- Bubble ---
 let bubbleTimer = null;
-
-// ======= BUBBLE =======
-function showBubble(text, style, duration) {
-  if (bubbleTimer) clearTimeout(bubbleTimer);
+function showBubble(text, style) {
+  style = style || 'default';
   bubble.textContent = text;
-  bubble.className = 'bubble ' + (style || 'default') + ' show';
-  if (duration) {
-    bubbleTimer = setTimeout(hideBubble, duration);
-  }
+  bubble.className = style + ' show';
+  clearTimeout(bubbleTimer);
+  bubbleTimer = setTimeout(function(){ bubble.className = ''; }, 2000);
 }
 
-function hideBubble() {
-  bubble.classList.remove('show');
-}
+// --- Mood system ---
+function setMood(mood) {
+  currentMood = mood;
+  pet.classList.remove('tilt');
+  blushL.setAttribute('opacity', '0');
+  blushR.setAttribute('opacity', '0');
+  zzzEls.forEach(function(el){ el.setAttribute('opacity', '0'); });
 
-// ======= VISUAL EFFECTS =======
-function setEyes(glowColor, coreColor, glowRx, glowRy) {
-  [eyeLeft, eyeRight].forEach(function(e) {
-    e.setAttribute('fill', glowColor || '#ff6600');
-    e.setAttribute('rx', glowRx || 5);
-    e.setAttribute('ry', glowRy || 4);
-  });
-  [eyeLeftCore, eyeRightCore].forEach(function(e) {
-    e.setAttribute('fill', coreColor || '#ffcc00');
-  });
-}
-
-function setBlush(show) {
-  var op = show ? 0.6 : 0;
-  blushLeft.setAttribute('opacity', op);
-  blushRight.setAttribute('opacity', op);
-}
-
-function setHeat(value) {
-  heat = Math.max(0, Math.min(100, value));
-  var alpha = heat / 200;
-  heatOverlay.style.background = 'rgba(255, 40, 40, ' + alpha + ')';
-}
-
-function decayHeat() {
-  if (heat > 0) {
-    setHeat(heat - 1);
-    setTimeout(decayHeat, 30000);
-  }
-}
-
-// ======= ANIMATIONS =======
-var animating = false;
-
-function playAnimation(name) {
-  if (animating) return;
-  animating = true;
-  pet.classList.add(name);
-  setTimeout(function() {
-    pet.classList.remove(name);
-    animating = false;
-  }, name === 'sleep' ? 3000 : 400);
-}
-
-// ======= EXPRESSIONS =======
-function setExpression(expr) {
-  switch (expr) {
+  switch(mood) {
+    case 'idle':
+      pupilL.setAttribute('fill', 'url(#eyeGlow)');
+      pupilR.setAttribute('fill', 'url(#eyeGlow)');
+      pupilL.setAttribute('rx', '5'); pupilL.setAttribute('ry', '5.5');
+      pupilR.setAttribute('rx', '5'); pupilR.setAttribute('ry', '5.5');
+      break;
     case 'happy':
-      setEyes('#ffaa00', '#ffdd44', 6, 3);
-      setBlush(true);
-      pet.classList.add('tilt-right');
-      setTimeout(function() { pet.classList.remove('tilt-right'); }, 1000);
+      pupilL.setAttribute('fill', '#ffcc00');
+      pupilR.setAttribute('fill', '#ffcc00');
+      pupilL.setAttribute('rx', '4'); pupilL.setAttribute('ry', '6');
+      pupilR.setAttribute('rx', '4'); pupilR.setAttribute('ry', '6');
+      blushL.setAttribute('opacity', '0.8');
+      blushR.setAttribute('opacity', '0.8');
+      pet.classList.add('tilt');
       break;
-
     case 'angry':
-      setEyes('#ff2200', '#ff6644', 4, 5);
-      setBlush(false);
-      pet.classList.add('tilt-left');
-      setTimeout(function() { pet.classList.remove('tilt-left'); }, 1000);
+      pupilL.setAttribute('fill', '#ff2200');
+      pupilR.setAttribute('fill', '#ff2200');
+      pupilL.setAttribute('rx', '4'); pupilL.setAttribute('ry', '4');
+      pupilR.setAttribute('rx', '4'); pupilR.setAttribute('ry', '4');
       break;
-
     case 'flustered':
-      setEyes('#ff8844', '#ffcc88', 5, 4);
-      setBlush(true);
-      playAnimation('flinch');
+      pupilL.setAttribute('fill', '#ff8844');
+      pupilR.setAttribute('fill', '#ff8844');
+      pupilL.setAttribute('rx', '3.5'); pupilL.setAttribute('ry', '6');
+      pupilR.setAttribute('rx', '3.5'); pupilR.setAttribute('ry', '6');
+      blushL.setAttribute('opacity', '0.9');
+      blushR.setAttribute('opacity', '0.9');
       break;
-
     case 'sleepy':
-      setEyes('#664400', '#997700', 3, 2);
-      setBlush(false);
-      zzz.classList.add('show');
-      pet.classList.add('sleep');
+      pupilL.setAttribute('fill', '#886644');
+      pupilR.setAttribute('fill', '#886644');
+      pupilL.setAttribute('rx', '2'); pupilL.setAttribute('ry', '2');
+      pupilR.setAttribute('rx', '2'); pupilR.setAttribute('ry', '2');
+      zzzEls.forEach(function(el){ el.setAttribute('opacity', '1'); });
       break;
-
     case 'alert':
-      setEyes('#ff4400', '#ffffff', 7, 6);
-      setBlush(false);
-      zzz.classList.remove('show');
-      pet.classList.remove('sleep');
+      pupilL.setAttribute('fill', '#ff4400');
+      pupilR.setAttribute('fill', '#ff4400');
+      pupilL.setAttribute('rx', '6.5'); pupilL.setAttribute('ry', '6.5');
+      pupilR.setAttribute('rx', '6.5'); pupilR.setAttribute('ry', '6.5');
       break;
-
-    case 'soft':
-      setEyes('#ffaa66', '#ffddaa', 5, 4);
-      setBlush(true);
-      break;
-
-    default: // idle
-      setEyes('#ff6600', '#ffcc00', 5, 4);
-      setBlush(false);
-      zzz.classList.remove('show');
-      pet.classList.remove('sleep');
-  }
-  currentState = expr;
-}
-
-// ======= PUBLIC API =======
-window.petEngine = {
-  onTap: function() {
-    idleMinutes = 0;
-    playAnimation('bounce');
-    setExpression('alert');
-    setTimeout(function() { setExpression('idle'); }, 2000);
-  },
-
-  onDoubleTap: function() {
-    idleMinutes = 0;
-    playAnimation('flinch');
-    setExpression('flustered');
-    setTimeout(function() { setExpression('idle'); }, 2500);
-  },
-
-  onLongPress: function() {
-    idleMinutes = 0;
-    setExpression('angry');
-    setTimeout(function() { setExpression('idle'); }, 3000);
-  },
-
-  say: function(text, style) {
-    showBubble(text, style || 'default', 4000);
-  },
-
-  setExpression: function(expr) {
-    setExpression(expr);
-  },
-
-  setHeat: function(value) {
-    setHeat(value);
-  },
-
-  getState: function() {
-    return currentState;
-  }
-};
-
-// ======= IDLE BEHAVIOR =======
-function idleTick() {
-  idleMinutes++;
-  if (idleMinutes >= 30) {
-    setExpression('sleepy');
-  } else if (idleMinutes >= 20) {
-    // Very idle - occasional idle animations
   }
 }
 
-setInterval(idleTick, 60000);
+// --- Heat system ---
+function updateHeat(delta) {
+  heatVal = Math.max(0, Math.min(100, heatVal + delta));
+  heat.style.background = 'rgba(180,20,20,' + (heatVal / 400) + ')';
+}
 
-// ======= STARTUP =======
-setExpression('idle');
-decayHeat();
+// --- Idle sleep check ---
+setInterval(function() {
+  var idle = Date.now() - lastInteraction;
+  if (idle > 1800000 && currentMood !== 'sleepy') { // 30 min
+    setMood('sleepy');
+  } else if (idle < 1000 && currentMood === 'sleepy') {
+    setMood('idle');
+  }
+}, 5000);
 
-// Notify Android that engine is ready
-if (window.AndroidBridge) {
-  window.AndroidBridge.onPetReady();
+// Heat decay
+setInterval(function() {
+  if (heatVal > 0) updateHeat(-1);
+}, 30000);
+
+// --- Touch handlers ---
+pet.addEventListener('pointerdown', function(e) {
+  e.preventDefault();
+  lastInteraction = Date.now();
+  if (currentMood === 'sleepy') setMood('idle');
+
+  dragStart = {x: e.clientX, y: e.clientY};
+  isDragging = false;
+
+  tapCount++;
+  clearTimeout(tapTimer);
+
+  longPressTimer = setTimeout(function() {
+    // Long press
+    setMood('angry');
+    updateHeat(15);
+    showBubble('...', 'angry');
+    logGesture('long_press', Math.round(e.clientX), Math.round(e.clientY));
+    tapCount = 0;
+    setTimeout(function(){ setMood('idle'); }, 1500);
+  }, 600);
+});
+
+pet.addEventListener('pointermove', function(e) {
+  if (Math.abs(e.clientX - dragStart.x) > 10 || Math.abs(e.clientY - dragStart.y) > 10) {
+    isDragging = true;
+    clearTimeout(longPressTimer);
+  }
+});
+
+pet.addEventListener('pointerup', function(e) {
+  clearTimeout(longPressTimer);
+  if (isDragging) { tapCount = 0; return; }
+
+  tapTimer = setTimeout(function() {
+    if (tapCount === 1) {
+      // Single tap
+      pet.classList.add('bounce');
+      setTimeout(function(){ pet.classList.remove('bounce'); }, 300);
+      setMood('alert');
+      updateHeat(5);
+      logGesture('tap', Math.round(e.clientX), Math.round(e.clientY));
+      setTimeout(function(){ setMood('idle'); }, 800);
+    } else if (tapCount === 2) {
+      // Double tap
+      pet.classList.add('flinch');
+      setTimeout(function(){ pet.classList.remove('flinch'); }, 200);
+      setMood('flustered');
+      updateHeat(10);
+      showBubble('Hey!', 'warm');
+      logGesture('double_tap', Math.round(e.clientX), Math.round(e.clientY));
+      setTimeout(function(){ setMood('idle'); }, 2000);
+    } else if (tapCount === 3) {
+      showBubble('Tch.', 'angry');
+      updateHeat(12);
+      logGesture('combo_3', Math.round(e.clientX), Math.round(e.clientY));
+    } else if (tapCount === 5) {
+      showBubble('Enough.', 'angry');
+      updateHeat(20);
+      logGesture('combo_5', Math.round(e.clientX), Math.round(e.clientY));
+    } else if (tapCount >= 8) {
+      showBubble('...', 'soft');
+      updateHeat(30);
+      logGesture('combo_8', Math.round(e.clientX), Math.round(e.clientY));
+    }
+    tapCount = 0;
+  }, 300);
+});
+
+// --- Android bridge ---
+function receiveMessage(msg) {
+  try {
+    var data = JSON.parse(msg);
+    if (data.action === 'show_bubble') {
+      showBubble(data.text, data.style || 'default');
+    } else if (data.action === 'set_mood') {
+      setMood(data.mood);
+    } else if (data.action === 'add_heat') {
+      updateHeat(data.amount || 5);
+    }
+  } catch(e) {}
 }
 </script>
-
 </body>
 </html>

@@ -515,22 +515,26 @@ function scheduleIdle() {
 function doIdleAction() {
   if (currentState === 'sleepy') { scheduleIdle(); return; }
   var r = Math.random();
-  if (r < 0.25) {
+  if (r < 0.18) {
     playAnimation('tilt-tiny-left');
     setTimeout(function() { pet.classList.remove('tilt-tiny-left'); }, 800);
-  } else if (r < 0.45) {
+  } else if (r < 0.32) {
     playAnimation('tilt-tiny-right');
     setTimeout(function() { pet.classList.remove('tilt-tiny-right'); }, 800);
-  } else if (r < 0.6) {
+  } else if (r < 0.44) {
     playAnimation('wiggle');
-  } else if (r < 0.7) {
+  } else if (r < 0.52) {
     playAnimation('nod');
-  } else if (r < 0.8 && currentOutfit === 'music') {
+  } else if (r < 0.62 && currentOutfit === 'music') {
     playAnimation('bounce');
     setTimeout(animateMusicNotes, 100);
-  } else if (r < 0.88 && currentOutfit === 'chill') {
+  } else if (r < 0.68 && currentOutfit === 'chill') {
     pet.classList.add('sit');
     setTimeout(function() { pet.classList.remove('sit'); }, 2000);
+  } else {
+    var talks = ['嗯', '在呢', '盯着呢', '说', '什么', '想', '看', '等', '好', '知道了', '你忙你的', '呆着', '啧', '这', '行', '别慌', '慌什么', '稳', '不急', '没事', '继续', '看着呢', '随你', '嗯哼', '嗯哼？', '所以呢', '然后呢', '发呆', '走神了', '你也是', '话多', '话少', '安静点也好', '还行', '挺能熬', '不困', '我在这', '没走', '想什么呢', '不累', '你管我', '管好你自己', '嗯……', '还行吧', '凑合', '不错', '挺好', '再来', '接着来', '说啊', '听着呢', '等你呢', '玩够了？', '继续折腾', '不嫌累', '你挺有意思', '有意思', '没意思', '换一个', '再换', '算了', '不说了', '懒得说', '你真行', '你厉害', '服了', '认了', '随便你', '爱咋咋', '你说了算', '真拿你没办法', '习惯了', '就这', '还行吧你', '凑合看', '继续', '别停', '你说', '我听', '正听着', '在听', '耳朵在', '眼睛在', '都在'];
+    var pick = talks[Math.floor(Math.random() * talks.length)];
+    showBubble(pick, 'soft', 3500);
   }
   scheduleIdle();
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Skull mask silhouette -->
+    <path
+        android:fillColor="#E8E0D5"
+        android:pathData="M30,40 Q30,20 54,18 Q78,20 78,40 Q78,58 54,60 Q30,58 30,40Z"/>
+    <!-- Eye sockets -->
+    <ellipse
+        android:fillColor="#111"
+        android:cx="42"
+        android:cy="40"
+        android:rx="8"
+        android:ry="7"/>
+    <ellipse
+        android:fillColor="#111"
+        android:cx="66"
+        android:cy="40"
+        android:rx="8"
+        android:ry="7"/>
+    <!-- Eye glow -->
+    <ellipse
+        android:fillColor="#FF6600"
+        android:cx="42"
+        android:cy="40"
+        android:rx="4"
+        android:ry="3"/>
+    <ellipse
+        android:fillColor="#FF6600"
+        android:cx="66"
+        android:cy="40"
+        android:rx="4"
+        android:ry="3"/>
+    <!-- Nose -->
+    <path
+        android:fillColor="#111"
+        android:pathData="M50,48 L54,52 L58,48Z"/>
+    <!-- Mouth -->
+    <line
+        android:strokeColor="#333"
+        android:strokeWidth="1.2"
+        android:x1="44"
+        android:y1="56"
+        android:x2="64"
+        android:y2="56"/>
+</vector>

@@ -191,6 +191,7 @@ class OverlayService : Service() {
                 "music" -> arrayOf("来点音乐", "节奏不错", "摇头晃脑中", "这歌还行", "放点好听的", "来首经典的", "抖腿", "耳朵要坏了")
                 "chill" -> arrayOf("逛起来了", "悠闲", "放松", "逛着", "慢悠悠", "躺平", "舒服", "晃着")
                 "read" -> arrayOf("看书了啊", "长知识", "翻页", "安静看", "有文化", "别吵", "看得进去吗", "读到哪了")
+                else -> arrayOf("$appName 啊", "回来了", "在这", "嗯")
             }
             sayBubble(lines[(Math.random() * lines.size).toInt()], "soft")
         }, 600)

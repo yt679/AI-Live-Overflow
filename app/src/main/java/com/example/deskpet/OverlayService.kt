@@ -33,7 +33,7 @@ class OverlayService : Service() {
         private const val CHANNEL_ID = "pet_overlay_channel"
         private const val NOTIFICATION_ID = 1001
         private const val PET_SIZE_DP = 160
-        private const val PET_HEIGHT_DP = 200
+        private const val PET_HEIGHT_DP = 220
         const val ACTION_PET_COMMAND = "com.example.deskpet.PET_COMMAND"
         const val EXTRA_COMMAND = "command"
         const val EXTRA_TEXT = "text"

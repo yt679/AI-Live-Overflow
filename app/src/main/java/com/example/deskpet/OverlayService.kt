@@ -195,11 +195,13 @@ class OverlayService : Service() {
 
     private fun getAppName(pkg: String): String {
         return when {
-            pkg.contains("bilibili") -> "B站"
             pkg.contains("weixin") || pkg.contains("tencent.mm") || pkg.contains("wechat") -> "微信"
-            pkg.contains("qq") && !pkg.contains("qqmusic") && !pkg.contains("tencent") -> "QQ"
+            pkg.contains("xingin.xhs") -> "小红书"
+            pkg.contains("alibaba.android.rimet") -> "钉钉"
+            pkg.contains("phoenix.read") -> "红果"
+            pkg.contains("douyin") || pkg.contains("aweme") -> "抖音"
+            pkg.contains("qq") && !pkg.contains("qqmusic") -> "QQ"
             pkg.contains("taobao") -> "淘宝"
-            pkg.contains("douyin") || pkg.contains("tiktok") -> "抖音"
             pkg.contains("netflix") -> "Netflix"
             pkg.contains("youtube") -> "YouTube"
             pkg.contains("spotify") || pkg.contains("qqmusic") || pkg.contains("netease") -> "音乐"
@@ -214,9 +216,9 @@ class OverlayService : Service() {
     private fun getOutfitForApp(pkg: String): String {
         return when {
             pkg.contains("launcher") || pkg.contains("com.android.launcher") -> "default"
-            pkg.contains("netflix") || pkg.contains("youtube") || pkg.contains("bilibili") -> "hoodie"
+            pkg.contains("xingin.xhs") || pkg.contains("phoenix.read") || pkg.contains("aweme") || pkg.contains("netflix") || pkg.contains("youtube") -> "hoodie"
             pkg.contains("settings") || pkg.contains("shizuku") || pkg.contains("operit") -> "stealth"
-            pkg.contains("weixin") || pkg.contains("wechat") || pkg.contains("tencent.mm") -> "formal"
+            pkg.contains("weixin") || pkg.contains("wechat") || pkg.contains("tencent.mm") || pkg.contains("alibaba.android.rimet") -> "formal"
             else -> "default"
         }
     }

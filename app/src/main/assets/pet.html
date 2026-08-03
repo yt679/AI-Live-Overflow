@@ -92,6 +92,14 @@
   .zzz.show { opacity: 1; }
   .eye-glow { transition: all 0.4s ease; }
   .blush { opacity: 0; transition: opacity 0.4s ease; }
+  .tail { transition: transform 0.4s ease; transform-origin: 118px 140px; }
+  .pet.tilt-right .tail { transform: rotate(-12deg); }
+  .pet.tilt-left .tail { transform: rotate(8deg); }
+  .pet.bounce .tail { animation: tailFlick 0.4s ease; }
+  @keyframes tailFlick {
+    0%,100% { transform: rotate(0); }
+    50% { transform: rotate(15deg); }
+  }
 </style>
 </head>
 <body>
@@ -101,13 +109,13 @@
   <div class="zzz" id="zzz">Zzz</div>
   <svg class="pet" id="pet" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <radialGradient id="bodyGrad" cx="50%" cy="30%" r="60%">
-        <stop offset="0%" stop-color="#4a4a52"/>
-        <stop offset="100%" stop-color="#1a1a20"/>
+      <radialGradient id="bodyGrad" cx="50%" cy="35%" r="60%">
+        <stop offset="0%" stop-color="#4a4a50"/>
+        <stop offset="100%" stop-color="#2a2a30"/>
       </radialGradient>
-      <radialGradient id="skullGrad" cx="50%" cy="25%" r="55%">
-        <stop offset="0%" stop-color="#f5f0e8"/>
-        <stop offset="100%" stop-color="#d4c8b8"/>
+      <radialGradient id="skullGrad" cx="50%" cy="30%" r="55%">
+        <stop offset="0%" stop-color="#f2ede5"/>
+        <stop offset="100%" stop-color="#d8cdc0"/>
       </radialGradient>
       <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
         <stop offset="0%" stop-color="#ffcc44"/>
@@ -115,71 +123,114 @@
         <stop offset="100%" stop-color="#cc4400"/>
       </radialGradient>
       <radialGradient id="cheekFlush" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ff9988" stop-opacity="0.6"/>
+        <stop offset="0%" stop-color="#ff9988" stop-opacity="0.5"/>
         <stop offset="100%" stop-color="#ff9988" stop-opacity="0"/>
       </radialGradient>
-      <filter id="softShadow" x="-20%" y="-10%" width="140%" height="130%">
-        <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.3"/>
+      <filter id="softShadow" x="-30%" y="-10%" width="160%" height="140%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.25"/>
       </filter>
       <filter id="eyeFilter" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="1.5" result="blur"/>
+        <feGaussianBlur stdDeviation="1.2" result="blur"/>
         <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
     </defs>
 
-    <!-- Shadow on ground -->
-    <ellipse cx="80" cy="188" rx="38" ry="6" fill="rgba(0,0,0,0.25)"/>
+    <!-- Ground shadow -->
+    <ellipse cx="80" cy="186" rx="36" ry="6" fill="rgba(0,0,0,0.22)"/>
 
-    <!-- Body: cute round ghost blob with wavy bottom -->
-    <g filter="url(#softShadow)">
-      <path id="bodyPath" d="M38 75 Q36 38 80 32 Q124 38 122 75 L124 155 Q122 170 109 166 Q100 156 90 166 Q80 174 70 166 Q60 156 51 166 Q38 170 38 155 Z" fill="url(#bodyGrad)"/>
+    <!-- Cat tail: black, curved behind body -->
+    <g class="tail">
+      <path d="M115 138 Q148 132 152 112 Q154 100 146 92 Q140 86 134 88"
+        fill="none" stroke="#1a1a1e" stroke-width="6" stroke-linecap="round"/>
+      <!-- Tail tip fluff -->
+      <ellipse cx="134" cy="88" rx="4" ry="3" fill="#1a1a1e" transform="rotate(-30 134 88)"/>
     </g>
 
-    <!-- Tiny cute hands -->
-    <ellipse cx="40" cy="108" rx="10" ry="7" fill="#2a2a32" transform="rotate(-20 40 108)"/>
-    <ellipse cx="120" cy="108" rx="10" ry="7" fill="#2a2a32" transform="rotate(20 120 108)"/>
+    <!-- Body: squat sitting pose, round and chubby -->
+    <g filter="url(#softShadow)">
+      <!-- Main body blob: wide at bottom, narrow at top -->
+      <path id="bodyPath"
+        d="M42 95 Q38 78 42 62 L44 52 L116 52 L118 62 Q122 78 118 95
+           L120 145 Q118 160 108 158 Q100 150 92 158 Q84 164 76 158 Q68 150 60 158 Q50 160 48 145 Z"
+        fill="url(#bodyGrad)"/>
+    </g>
 
-    <!-- Hood/beanie top -->
-    <path d="M44 42 Q42 28 80 26 Q118 28 116 42 Q118 34 80 30 Q42 34 44 42Z" fill="#222228"/>
+    <!-- Hoodie body: drapes over shoulders and torso -->
+    <path d="M38 58 Q36 50 44 46 L50 44 L110 44 L116 46 Q124 50 122 58 L120 72 Q118 60 80 56 Q42 60 40 72 Z"
+      fill="#3a3a42" stroke="#333" stroke-width="0.5"/>
+
+    <!-- Hoodie: hood wrapping around head -->
+    <path d="M42 56 Q40 38 48 28 Q56 20 80 18 Q104 20 112 28 Q120 38 118 56 L116 62 Q114 50 80 46 Q46 50 44 62 Z"
+      fill="#3a3a42" stroke="#333" stroke-width="0.5"/>
+
+    <!-- Cat ears on hood -->
+    <!-- Left ear -->
+    <path d="M48 30 L38 8 L58 26 Z" fill="#3a3a42" stroke="#333" stroke-width="0.5" stroke-linejoin="round"/>
+    <path d="M48 30 L42 15 L56 26 Z" fill="#2a2a32" stroke="none"/>
+    <!-- Right ear -->
+    <path d="M112 30 L122 8 L102 26 Z" fill="#3a3a42" stroke="#333" stroke-width="0.5" stroke-linejoin="round"/>
+    <path d="M112 30 L118 15 L104 26 Z" fill="#2a2a32" stroke="none"/>
+
+    <!-- Hood edge wear and tear: small jagged cuts -->
+    <path d="M44 60 L42 58 L46 56 L44 54 L48 52" fill="none" stroke="#555" stroke-width="0.6" stroke-linecap="round"/>
+    <path d="M114 58 L116 56 L113 54 L115 52" fill="none" stroke="#555" stroke-width="0.6" stroke-linecap="round"/>
+    <path d="M42 50 L40 48" fill="none" stroke="#555" stroke-width="0.5" stroke-linecap="round"/>
+    <path d="M118 48 L120 46" fill="none" stroke="#555" stroke-width="0.5" stroke-linecap="round"/>
 
     <!-- Skull mask on face -->
     <g id="skullMask">
       <!-- Mask base: rounded skull shape -->
-      <rect x="50" y="44" width="60" height="54" rx="16" ry="15" fill="url(#skullGrad)" stroke="#b8a898" stroke-width="0.8"/>
+      <rect x="53" y="44" width="54" height="48" rx="14" ry="13"
+        fill="url(#skullGrad)" stroke="#c0b4a4" stroke-width="0.7"/>
 
       <!-- Cheekbone contours -->
-      <path d="M50 64 Q46 62 46 58 Q46 52 50 48" fill="none" stroke="#c8b8a4" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M110 64 Q114 62 114 58 Q114 52 110 48" fill="none" stroke="#c8b8a4" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M53 64 Q49 62 49 58 Q49 52 53 48" fill="none" stroke="#c8bca8" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M107 64 Q111 62 111 58 Q111 52 107 48" fill="none" stroke="#c8bca8" stroke-width="1.2" stroke-linecap="round"/>
 
-      <!-- Eye sockets: dark pits -->
-      <ellipse id="eyeL" cx="64" cy="63" rx="10" ry="11" fill="#1a1a18"/>
-      <ellipse id="eyeR" cx="96" cy="63" rx="10" ry="11" fill="#1a1a18"/>
+      <!-- Eye sockets: large round dark pits -->
+      <ellipse id="eyeL" cx="66" cy="63" rx="9" ry="10" fill="#0a0a0a"/>
+      <ellipse id="eyeR" cx="94" cy="63" rx="9" ry="10" fill="#0a0a0a"/>
 
-      <!-- Glowing amber pupils -->
-      <ellipse class="eye-glow" id="eyeLeft" cx="64" cy="63" rx="5" ry="5.5" fill="url(#eyeGlow)" filter="url(#eyeFilter)"/>
-      <ellipse class="eye-glow" id="eyeRight" cx="96" cy="63" rx="5" ry="5.5" fill="url(#eyeGlow)" filter="url(#eyeFilter)"/>
+      <!-- Glowing amber pupils (hidden inside black sockets, visible on mood change) -->
+      <ellipse class="eye-glow" id="eyeLeft" cx="66" cy="63" rx="4" ry="5" fill="url(#eyeGlow)" filter="url(#eyeFilter)" opacity="0"/>
+      <ellipse class="eye-glow" id="eyeRight" cx="94" cy="63" rx="4" ry="5" fill="url(#eyeGlow)" filter="url(#eyeFilter)" opacity="0"/>
 
-      <!-- Eye highlights: tiny white dots -->
-      <ellipse cx="61.5" cy="61" rx="1.8" ry="1.8" fill="#fff" opacity="0.7"/>
-      <ellipse cx="93.5" cy="61" rx="1.8" ry="1.8" fill="#fff" opacity="0.7"/>
+      <!-- Eye highlights -->
+      <ellipse cx="63.5" cy="61" rx="1.5" ry="1.5" fill="#333" opacity="0.4"/>
+      <ellipse cx="91.5" cy="61" rx="1.5" ry="1.5" fill="#333" opacity="0.4"/>
 
-      <!-- Nose hole -->
-      <ellipse cx="80" cy="79" rx="3.5" ry="2.5" fill="#1a1a18"/>
+      <!-- Nose: tiny triangle -->
+      <path d="M78 77 L80 80 L82 77 Z" fill="#1a1a18"/>
 
-      <!-- Jaw crack line -->
-      <path d="M54 86 Q62 92 80 90 Q98 92 106 86" fill="none" stroke="#b8a898" stroke-width="1" stroke-linecap="round"/>
-      <line x1="80" y1="90" x2="80" y2="98" stroke="#b8a898" stroke-width="0.8" stroke-linecap="round"/>
+      <!-- Jaw crack -->
+      <path d="M56 84 Q64 90 80 88 Q96 90 104 84" fill="none" stroke="#c0b4a4" stroke-width="0.8" stroke-linecap="round"/>
+      <line x1="80" y1="88" x2="80" y2="96" stroke="#c0b4a4" stroke-width="0.6" stroke-linecap="round"/>
 
       <!-- Teeth lines -->
-      <line x1="66" y1="86" x2="66" y2="92" stroke="#c8b8a4" stroke-width="0.6"/>
-      <line x1="74" y1="88" x2="74" y2="94" stroke="#c8b8a4" stroke-width="0.6"/>
-      <line x1="86" y1="88" x2="86" y2="94" stroke="#c8b8a4" stroke-width="0.6"/>
-      <line x1="94" y1="86" x2="94" y2="92" stroke="#c8b8a4" stroke-width="0.6"/>
+      <line x1="64" y1="84" x2="64" y2="89" stroke="#c8bca8" stroke-width="0.5"/>
+      <line x1="72" y1="86" x2="72" y2="91" stroke="#c8bca8" stroke-width="0.5"/>
+      <line x1="88" y1="86" x2="88" y2="91" stroke="#c8bca8" stroke-width="0.5"/>
+      <line x1="96" y1="84" x2="96" y2="89" stroke="#c8bca8" stroke-width="0.5"/>
     </g>
 
-    <!-- Cheek blush: hidden by default -->
-    <ellipse class="blush" id="blushLeft" cx="54" cy="78" rx="8" ry="5" fill="url(#cheekFlush)" opacity="0"/>
-    <ellipse class="blush" id="blushRight" cx="106" cy="78" rx="8" ry="5" fill="url(#cheekFlush)" opacity="0"/>
+    <!-- Cheek blush (hidden by default) -->
+    <ellipse class="blush" id="blushLeft" cx="56" cy="76" rx="7" ry="4" fill="url(#cheekFlush)" opacity="0"/>
+    <ellipse class="blush" id="blushRight" cx="104" cy="76" rx="7" ry="4" fill="url(#cheekFlush)" opacity="0"/>
+
+    <!-- Paws: small round shapes resting in front -->
+    <ellipse cx="52" cy="142" rx="14" ry="9" fill="#2a2a32" stroke="#333" stroke-width="0.5"/>
+    <ellipse cx="108" cy="142" rx="14" ry="9" fill="#2a2a32" stroke="#333" stroke-width="0.5"/>
+    <!-- Paw toe lines -->
+    <line x1="46" y1="140" x2="44" y2="143" stroke="#444" stroke-width="0.5" stroke-linecap="round"/>
+    <line x1="52" y1="139" x2="52" y2="143" stroke="#444" stroke-width="0.5" stroke-linecap="round"/>
+    <line x1="58" y1="140" x2="56" y2="143" stroke="#444" stroke-width="0.5" stroke-linecap="round"/>
+    <line x1="102" y1="140" x2="104" y2="143" stroke="#444" stroke-width="0.5" stroke-linecap="round"/>
+    <line x1="108" y1="139" x2="108" y2="143" stroke="#444" stroke-width="0.5" stroke-linecap="round"/>
+    <line x1="114" y1="140" x2="116" y2="143" stroke="#444" stroke-width="0.5" stroke-linecap="round"/>
+
+    <!-- Loose pants / baggy bottom -->
+    <path d="M46 148 Q42 155 44 162 Q48 168 60 164 Q70 158 80 164 Q90 158 100 164 Q112 168 116 162 Q118 155 114 148"
+      fill="none" stroke="#3a3a42" stroke-width="3" stroke-linecap="round"/>
   </svg>
 </div>
 <script>
@@ -205,15 +256,16 @@ function showBubble(text, style, duration) {
 }
 function hideBubble() { bubble.classList.remove('show'); }
 
-function setEyes(glowColor, glowRx, glowRy) {
+function setEyes(glowColor, glowRx, glowRy, glowOpacity) {
   [eyeLeft, eyeRight].forEach(function(e) {
     e.setAttribute('fill', glowColor || '#ff6600');
-    e.setAttribute('rx', glowRx || 5);
-    e.setAttribute('ry', glowRy || 4);
+    e.setAttribute('rx', glowRx || 4);
+    e.setAttribute('ry', glowRy || 5);
+    e.setAttribute('opacity', glowOpacity != null ? glowOpacity : '0');
   });
 }
 function setBlush(show) {
-  var op = show ? 0.6 : 0;
+  var op = show ? 0.5 : 0;
   blushLeft.setAttribute('opacity', op);
   blushRight.setAttribute('opacity', op);
 }
@@ -234,34 +286,34 @@ function playAnimation(name) {
 function setExpression(expr) {
   switch (expr) {
     case 'happy':
-      setEyes('#ffcc00', 5, 6); setBlush(true);
+      setEyes('#ffcc00', 3, 5, 1); setBlush(true);
       pet.classList.add('tilt-right');
       setTimeout(function() { pet.classList.remove('tilt-right'); }, 1000);
       break;
     case 'angry':
-      setEyes('#ff2200', 4, 5); setBlush(false);
+      setEyes('#ff2200', 3, 3, 1); setBlush(false);
       pet.classList.add('tilt-left');
       setTimeout(function() { pet.classList.remove('tilt-left'); }, 1000);
       break;
     case 'flustered':
-      setEyes('#ff8844', 4, 6); setBlush(true);
+      setEyes('#ff8844', 3, 5, 1); setBlush(true);
       playAnimation('flinch');
       break;
     case 'sleepy':
-      setEyes('#664400', 2, 2); setBlush(false);
+      setEyes('#664400', 1.5, 1.5, 0.6); setBlush(false);
       zzz.classList.add('show');
       pet.classList.add('sleep');
       break;
     case 'alert':
-      setEyes('#ff4400', 7, 6); setBlush(false);
+      setEyes('#ff4400', 6, 6, 1); setBlush(false);
       zzz.classList.remove('show');
       pet.classList.remove('sleep');
       break;
     case 'soft':
-      setEyes('#ffaa66', 5, 4); setBlush(true);
+      setEyes('#ffaa66', 4, 4, 0.8); setBlush(true);
       break;
     default:
-      setEyes('#ff6600', 5, 5.5); setBlush(false);
+      setEyes('#ff6600', 4, 5, 0); setBlush(false);
       zzz.classList.remove('show');
       pet.classList.remove('sleep');
   }

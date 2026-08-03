@@ -22,7 +22,7 @@
   }
   .pet {
     width: 120px;
-    height: 160px;
+    height: 150px;
     transition: transform 0.3s ease;
   }
   .pet.tilt-left  { transform: rotate(-5deg); }
@@ -47,7 +47,7 @@
   }
   .bubble {
     position: absolute;
-    top: -50px;
+    top: -48px;
     left: 50%;
     transform: translateX(-50%);
     max-width: 180px;
@@ -82,8 +82,8 @@
   .zzz {
     position: absolute;
     top: 0;
-    right: 5px;
-    font-size: 14px;
+    right: 10px;
+    font-size: 13px;
     color: #8899cc;
     opacity: 0;
     transition: opacity 0.5s ease;
@@ -98,7 +98,7 @@
 <div class="container">
   <div class="bubble default" id="bubble"></div>
   <div class="zzz" id="zzz">Zzz</div>
-  <svg class="pet" id="pet" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+  <svg class="pet" id="pet" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <radialGradient id="skullGrad" cx="50%" cy="35%" r="55%">
         <stop offset="0%" stop-color="#faf5ee"/>
@@ -118,85 +118,89 @@
       </filter>
     </defs>
 
-    <!-- Shadow on ground -->
-    <ellipse cx="60" cy="152" rx="30" ry="5" fill="rgba(0,0,0,0.18)"/>
+    <!-- Ground shadow -->
+    <ellipse cx="60" cy="145" rx="24" ry="4" fill="rgba(0,0,0,0.18)"/>
 
-    <!-- Legs: tiny stubby legs -->
-    <rect x="44" y="120" width="12" height="18" rx="5" fill="#1a1a22"/>
-    <rect x="64" y="120" width="12" height="18" rx="5" fill="#1a1a22"/>
-    <!-- Boots -->
-    <rect x="42" y="134" width="16" height="8" rx="3" fill="#2a2a34"/>
-    <rect x="62" y="134" width="16" height="8" rx="3" fill="#2a2a34"/>
+    <!-- Feet: tiny boots -->
+    <rect x="48" y="120" width="10" height="10" rx="3" fill="#1a1a22"/>
+    <rect x="62" y="120" width="10" height="10" rx="3" fill="#1a1a22"/>
+    <rect x="46" y="128" width="14" height="6" rx="2" fill="#2a2a36"/>
+    <rect x="60" y="128" width="14" height="6" rx="2" fill="#2a2a36"/>
 
-    <!-- Body: chibi torso, tactical vest -->
+    <!-- Body: chibi torso with tactical vest -->
     <g filter="url(#softShadow)">
-      <!-- Torso -->
-      <rect x="38" y="82" width="44" height="42" rx="8" fill="#2a2a34"/>
-      <!-- Tactical vest: darker panel -->
-      <rect x="36" y="84" width="48" height="38" rx="7" fill="#1e1e28"/>
-      <!-- Vest pocket left -->
-      <rect x="40" y="88" width="14" height="12" rx="2" fill="#252530" stroke="#333" stroke-width="0.5"/>
-      <!-- Vest pocket right -->
-      <rect x="66" y="88" width="14" height="12" rx="2" fill="#252530" stroke="#333" stroke-width="0.5"/>
-      <!-- Vest center strap -->
-      <line x1="56" y1="84" x2="56" y2="100" stroke="#333" stroke-width="0.6"/>
-      <!-- Vest pouch row -->
-      <rect x="40" y="104" width="8" height="6" rx="1" fill="#2a2a36" stroke="#333" stroke-width="0.3"/>
-      <rect x="50" y="104" width="8" height="6" rx="1" fill="#2a2a36" stroke="#333" stroke-width="0.3"/>
-      <rect x="60" y="104" width="8" height="6" rx="1" fill="#2a2a36" stroke="#333" stroke-width="0.3"/>
-      <rect x="70" y="104" width="8" height="6" rx="1" fill="#2a2a36" stroke="#333" stroke-width="0.3"/>
+      <rect x="40" y="84" width="40" height="38" rx="7" fill="#282830"/>
+      <!-- Tactical vest panel -->
+      <rect x="38" y="86" width="44" height="34" rx="6" fill="#1c1c24"/>
+      <!-- Vest pockets -->
+      <rect x="42" y="90" width="12" height="10" rx="2" fill="#22222c" stroke="#333" stroke-width="0.4"/>
+      <rect x="66" y="90" width="12" height="10" rx="2" fill="#22222c" stroke="#333" stroke-width="0.4"/>
+      <!-- Vest pouches row -->
+      <rect x="42" y="104" width="7" height="5" rx="1" fill="#282834" stroke="#333" stroke-width="0.3"/>
+      <rect x="51" y="104" width="7" height="5" rx="1" fill="#282834" stroke="#333" stroke-width="0.3"/>
+      <rect x="60" y="104" width="7" height="5" rx="1" fill="#282834" stroke="#333" stroke-width="0.3"/>
+      <rect x="69" y="104" width="7" height="5" rx="1" fill="#282834" stroke="#333" stroke-width="0.3"/>
     </g>
 
-    <!-- Arms: tiny at sides -->
-    <ellipse cx="34" cy="90" rx="6" ry="14" fill="#2a2a34" transform="rotate(10 34 90)"/>
-    <ellipse cx="86" cy="90" rx="6" ry="14" fill="#2a2a34" transform="rotate(-10 86 90)"/>
+    <!-- Arms with proper hand shapes, not ellipses -->
+    <!-- Left arm -->
+    <rect x="32" y="88" width="8" height="20" rx="4" fill="#282830"/>
+    <!-- Left hand: small rounded rectangle with finger lines -->
+    <rect x="30" y="106" width="10" height="8" rx="3" fill="#282830"/>
+    <line x1="33" y1="106" x2="33" y2="112" stroke="#333" stroke-width="0.4"/>
+    <line x1="35" y1="106" x2="35" y2="112" stroke="#333" stroke-width="0.4"/>
+    <line x1="37" y1="106" x2="37" y2="112" stroke="#333" stroke-width="0.4"/>
 
-    <!-- Head: big chibi head, balaclava + skull mask -->
-    <g>
-      <!-- Balaclava: dark fabric covering head -->
-      <ellipse cx="60" cy="58" rx="28" ry="26" fill="#2a2a34"/>
-      <!-- Balaclava texture/fold lines -->
-      <path d="M38 50 Q40 46 44 44" fill="none" stroke="#353540" stroke-width="0.6"/>
-      <path d="M82 50 Q80 46 76 44" fill="none" stroke="#353540" stroke-width="0.6"/>
+    <!-- Right arm -->
+    <rect x="80" y="88" width="8" height="20" rx="4" fill="#282830"/>
+    <!-- Right hand -->
+    <rect x="80" y="106" width="10" height="8" rx="3" fill="#282830"/>
+    <line x1="83" y1="106" x2="83" y2="112" stroke="#333" stroke-width="0.4"/>
+    <line x1="85" y1="106" x2="85" y2="112" stroke="#333" stroke-width="0.4"/>
+    <line x1="87" y1="106" x2="87" y2="112" stroke="#333" stroke-width="0.4"/>
 
-      <!-- Skull mask on face: white bone plate -->
-      <ellipse cx="60" cy="60" rx="20" ry="18" fill="url(#skullGrad)" stroke="#c4b8a8" stroke-width="0.6"/>
+    <!-- Head: big chibi head -->
+    <!-- Balaclava base -->
+    <ellipse cx="60" cy="56" rx="26" ry="24" fill="#282830"/>
 
-      <!-- Skull cheekbone curves -->
-      <path d="M42 64 Q40 60 42 54" fill="none" stroke="#ccc0b0" stroke-width="1" stroke-linecap="round"/>
-      <path d="M78 64 Q80 60 78 54" fill="none" stroke="#ccc0b0" stroke-width="1" stroke-linecap="round"/>
+    <!-- Skull mask plate -->
+    <ellipse cx="60" cy="58" rx="19" ry="17" fill="url(#skullGrad)" stroke="#c4b8a8" stroke-width="0.5"/>
 
-      <!-- Eye sockets: dark pits, slightly angled for cool look -->
-      <ellipse id="eyeL" cx="53" cy="58" rx="7" ry="8" fill="#0a0a0a" transform="rotate(-3 53 58)"/>
-      <ellipse id="eyeR" cx="67" cy="58" rx="7" ry="8" fill="#0a0a0a" transform="rotate(3 67 58)"/>
+    <!-- Cheekbone lines -->
+    <path d="M43 62 Q41 58 43 52" fill="none" stroke="#ccc0b0" stroke-width="0.9" stroke-linecap="round"/>
+    <path d="M77 62 Q79 58 77 52" fill="none" stroke="#ccc0b0" stroke-width="0.9" stroke-linecap="round"/>
 
-      <!-- Glowing amber eyes: the signature feature -->
-      <ellipse class="eye-glow" id="eyeLeft" cx="53" cy="58" rx="3.5" ry="4"
-        fill="url(#eyeGlow)" filter="url(#eyeFilter)" opacity="1"/>
-      <ellipse class="eye-glow" id="eyeRight" cx="67" cy="58" rx="3.5" ry="4"
-        fill="url(#eyeGlow)" filter="url(#eyeFilter)" opacity="1"/>
+    <!-- Eye sockets -->
+    <ellipse id="eyeL" cx="53" cy="56" rx="7" ry="7.5" fill="#0a0a0a"/>
+    <ellipse id="eyeR" cx="67" cy="56" rx="7" ry="7.5" fill="#0a0a0a"/>
 
-      <!-- Eye highlights -->
-      <ellipse cx="50.5" cy="56" rx="1.5" ry="1.5" fill="#fff" opacity="0.85"/>
-      <ellipse cx="64.5" cy="56" rx="1.5" ry="1.5" fill="#fff" opacity="0.85"/>
+    <!-- Glowing amber pupils -->
+    <ellipse class="eye-glow" id="eyeLeft" cx="53" cy="56" rx="3.5" ry="4"
+      fill="url(#eyeGlow)" filter="url(#eyeFilter)" opacity="1"/>
+    <ellipse class="eye-glow" id="eyeRight" cx="67" cy="56" rx="3.5" ry="4"
+      fill="url(#eyeGlow)" filter="url(#eyeFilter)" opacity="1"/>
 
-      <!-- Nose cavity: tiny -->
-      <ellipse cx="60" cy="68" rx="2.5" ry="1.8" fill="#1a1a18"/>
+    <!-- Eye sparkle -->
+    <ellipse cx="50.5" cy="54" rx="1.4" ry="1.4" fill="#fff" opacity="0.85"/>
+    <ellipse cx="64.5" cy="54" rx="1.4" ry="1.4" fill="#fff" opacity="0.85"/>
 
-      <!-- Jaw crack line -->
-      <path d="M44 74 Q52 78 60 76 Q68 78 76 74" fill="none" stroke="#c4b8a8" stroke-width="0.7" stroke-linecap="round"/>
-      <line x1="60" y1="76" x2="60" y2="81" stroke="#c4b8a8" stroke-width="0.5" stroke-linecap="round"/>
+    <!-- Nose cavity -->
+    <ellipse cx="60" cy="66" rx="2.5" ry="1.8" fill="#1a1a18"/>
 
-      <!-- Teeth lines -->
-      <line x1="50" y1="74" x2="50" y2="78" stroke="#ccc0b0" stroke-width="0.4"/>
-      <line x1="56" y1="75" x2="56" y2="79" stroke="#ccc0b0" stroke-width="0.4"/>
-      <line x1="64" y1="75" x2="64" y2="79" stroke="#ccc0b0" stroke-width="0.4"/>
-      <line x1="70" y1="74" x2="70" y2="78" stroke="#ccc0b0" stroke-width="0.4"/>
-    </g>
+    <!-- Jaw crack -->
+    <path d="M45 72 Q52 76 60 74 Q68 76 75 72" fill="none" stroke="#c4b8a8" stroke-width="0.7" stroke-linecap="round"/>
+    <line x1="60" y1="74" x2="60" y2="79" stroke="#c4b8a8" stroke-width="0.5" stroke-linecap="round"/>
 
-    <!-- Beret/beanie on top -->
-    <ellipse cx="60" cy="38" rx="24" ry="6" fill="#1e1e28"/>
-    <path d="M36 38 Q36 24 60 22 Q84 24 84 38" fill="#1e1e28" stroke="#2a2a36" stroke-width="0.3"/>
+    <!-- Teeth -->
+    <line x1="50" y1="72" x2="50" y2="76" stroke="#ccc0b0" stroke-width="0.4"/>
+    <line x1="56" y1="73" x2="56" y2="77" stroke="#ccc0b0" stroke-width="0.4"/>
+    <line x1="64" y1="73" x2="64" y2="77" stroke="#ccc0b0" stroke-width="0.4"/>
+    <line x1="70" y1="72" x2="70" y2="76" stroke="#ccc0b0" stroke-width="0.4"/>
+
+    <!-- Headphones around neck -->
+    <path d="M34 78 Q32 84 38 84" fill="none" stroke="#1a1a24" stroke-width="3" stroke-linecap="round"/>
+    <path d="M86 78 Q88 84 82 84" fill="none" stroke="#1a1a24" stroke-width="3" stroke-linecap="round"/>
+    <path d="M38 82 Q60 90 82 82" fill="none" stroke="#1a1a24" stroke-width="2" stroke-linecap="round"/>
   </svg>
 </div>
 <script>

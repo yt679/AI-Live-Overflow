@@ -27,11 +27,16 @@ body { background: transparent; overflow: visible; width: 160px; height: 240px; 
 .wiggle { animation: wiggle 0.6s ease; }
 .nod { animation: nod 0.6s ease; }
 .sleep { animation: breathe 3s ease-in-out infinite; }
+.wake { animation: stretch 0.8s ease-out; }
 .tilt-right { transform: rotate(8deg); }
 .tilt-left { transform: rotate(-8deg); }
 .tilt-tiny-right { transform: rotate(4deg); }
 .tilt-tiny-left { transform: rotate(-4deg); }
 .sit { transform: translateY(8px); }
+.carry { animation: carry 1.2s ease-in-out infinite; }
+.drowsy { animation: drowsy 2s ease-in-out infinite; }
+.peek { animation: peek 1.5s ease-in-out infinite; }
+.bubble { animation: bubble 1.8s ease-in-out infinite; }
 
 @keyframes bounce { 0%,100% { transform: translateY(0); } 30% { transform: translateY(-12px); } 60% { transform: translateY(-4px); } }
 @keyframes flinch { 0% { transform: scale(1); } 30% { transform: scale(0.85, 1.15); } 60% { transform: scale(1.05, 0.95); } 100% { transform: scale(1); } }
@@ -40,6 +45,11 @@ body { background: transparent; overflow: visible; width: 160px; height: 240px; 
 @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1, 0.96); } }
 
 @keyframes float-up { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 0.9; } 80% { opacity: 0.5; } 100% { transform: translateY(-14px); opacity: 0; } }
+@keyframes stretch { 0% { transform: scale(0.9, 1.1); } 30% { transform: scale(1.08, 0.92); } 60% { transform: scale(0.97, 1.03); } 100% { transform: scale(1, 1); } }
+@keyframes carry { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+@keyframes drowsy { 0%,100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(2px) rotate(-2deg); } 70% { transform: translateY(-1px) rotate(1deg); } }
+@keyframes peek { 0%,100% { transform: translateY(0); } 15% { transform: translateY(-5px); } 30% { transform: translateY(0); } 45% { transform: translateY(-3px); } 60% { transform: translateY(0); } }
+@keyframes bubble { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
 
 .note-float { animation: float-up 1.6s ease-out forwards; }
 
@@ -246,9 +256,6 @@ function setHeat(value) {
   heat = Math.max(0, Math.min(100, value));
   heatOverlay.style.background = 'rgba(255, 40, 40, ' + (heat / 200) + ')';
 }
-function decayHeat() {
-  if (heat > 0) { setHeat(heat - 1); setTimeout(decayHeat, 30000); }
-}
 
 var animating = false;
 function playAnimation(name) {
@@ -260,6 +267,10 @@ function playAnimation(name) {
 }
 
 function setExpression(expr) {
+  var animClasses = ['sleep', 'wake', 'carry', 'drowsy', 'peek', 'bubble', 'tilt-right', 'tilt-left', 'tilt-tiny-right', 'tilt-tiny-left', 'sit'];
+  animClasses.forEach(function(c) { pet.classList.remove(c); });
+  zzz.classList.remove('show');
+
   switch (expr) {
     case 'happy':
       setEyes('#ffcc00', 3, 4.5, 1);
@@ -275,15 +286,43 @@ function setExpression(expr) {
       setEyes('#ff8844', 3, 4.5, 1);
       playAnimation('flinch');
       break;
-    case 'sleepy':
+    case 'sleep':
       setEyes('#664400', 1.5, 1.5, 0.4);
       zzz.classList.add('show');
       pet.classList.add('sleep');
       break;
+    case 'wake':
+      setEyes('#ffaa66', 3.5, 3.5, 0.7);
+      pet.classList.add('wake');
+      setTimeout(function() { pet.classList.remove('wake'); }, 800);
+      break;
+    case 'peek':
+      setEyes('#ffcc44', 4, 4, 0.8);
+      pet.classList.add('peek');
+      break;
+    case 'bubble':
+      setEyes('#88aacc', 3, 3, 0.6);
+      pet.classList.add('bubble');
+      break;
+    case 'carry':
+      setEyes('#ffaa66', 3, 3.5, 0.7);
+      pet.classList.add('carry');
+      break;
+    case 'drowsy':
+      setEyes('#664400', 1.5, 1.5, 0.5);
+      pet.classList.add('drowsy');
+      break;
+    case 'shocked':
+      setEyes('#ffee00', 5.5, 5.5, 1);
+      playAnimation('flinch');
+      break;
+    case 'sad':
+      setEyes('#6688aa', 2.5, 3, 0.6);
+      pet.classList.add('tilt-tiny-left');
+      setTimeout(function() { pet.classList.remove('tilt-tiny-left'); }, 1500);
+      break;
     case 'alert':
       setEyes('#ff4400', 5, 5, 1);
-      zzz.classList.remove('show');
-      pet.classList.remove('sleep');
       break;
     case 'soft':
       setEyes('#ffaa66', 3.5, 3.5, 0.7);
@@ -305,6 +344,8 @@ function setExpression(expr) {
       setEyes('#ffee00', 5.5, 5.5, 1);
       playAnimation('flinch');
       break;
+    case 'normal':
+    case 'idle':
     default:
       setEyes('url(#eyeGlow)', 3.5, 4, 1);
       zzz.classList.remove('show');
@@ -513,7 +554,7 @@ function scheduleIdle() {
   idleTimer = setTimeout(doIdleAction, delay);
 }
 function doIdleAction() {
-  if (currentState === 'sleepy') { scheduleIdle(); return; }
+  if (currentState === 'sleep') { scheduleIdle(); return; }
   var r = Math.random();
   if (r < 0.18) {
     playAnimation('tilt-tiny-left');
@@ -546,7 +587,7 @@ function scheduleBlink() {
   blinkTimer = setTimeout(doBlink, delay);
 }
 function doBlink() {
-  if (currentState === 'sleepy') { scheduleBlink(); return; }
+  if (currentState === 'sleep') { scheduleBlink(); return; }
   [eyeLeft, eyeRight, sparkL, sparkR].forEach(function(e) { e.setAttribute('opacity', '0.1'); });
   setTimeout(function() {
     [eyeLeft, eyeRight, sparkL, sparkR].forEach(function(e) { e.setAttribute('opacity', '1'); });
@@ -584,13 +625,7 @@ window.petEngine = {
   getOutfit: function() { return currentOutfit; }
 };
 
-setInterval(function() {
-  idleMinutes++;
-  if (idleMinutes >= 30) setExpression('sleepy');
-}, 60000);
-
 setExpression('idle');
-decayHeat();
 scheduleIdle();
 scheduleBlink();
 </script>

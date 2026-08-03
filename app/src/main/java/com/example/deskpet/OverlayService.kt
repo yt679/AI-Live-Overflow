@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.provider.Settings
 import android.view.*
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -139,14 +140,14 @@ class OverlayService : Service() {
                 }
             }
         }
-        registerReceiver(receiver, IntentFilter(ACTION_PET_COMMAND), Context.RECEIVER_NOT_EXPORTED)
+        registerReceiver(receiver, IntentFilter(ACTION_PET_COMMAND), Context.RECEIVER_EXPORTED)
     }
 
     private fun startAppMonitor() {
         appCheckRunnable = object : Runnable {
             override fun run() {
                 checkForegroundApp()
-                handler.postDelayed(this, 2000)
+                handler.postDelayed(this, 3000)
             }
         }
         handler.post(appCheckRunnable!!)
@@ -158,7 +159,7 @@ class OverlayService : Service() {
             val now = System.currentTimeMillis()
             val stats = usageStatsManager.queryUsageStats(
                 UsageStatsManager.INTERVAL_DAILY,
-                now - 10000,
+                now - 15000,
                 now
             )
             stats?.maxByOrNull { it.lastTimeUsed }?.packageName
@@ -173,28 +174,40 @@ class OverlayService : Service() {
         lastApp = pkg
 
         val outfit = getOutfitForApp(pkg)
+        val appName = getAppName(pkg)
+
+        android.util.Log.d("OverlayService", "Switched to $pkg ($appName), outfit=$outfit")
+
         if (outfit != lastOutfit) {
             lastOutfit = outfit
             setOutfit(outfit)
+        }
 
-            val appName = when {
-                pkg.contains("bilibili") -> "B站"
-                pkg.contains("weixin") || pkg.contains("tencent.mm") -> "微信"
-                pkg.contains("qq") && !pkg.contains("qqmusic") -> "QQ"
-                pkg.contains("taobao") -> "淘宝"
-                pkg.contains("douyin") || pkg.contains("tiktok") -> "抖音"
-                pkg.contains("netflix") -> "Netflix"
-                pkg.contains("youtube") -> "YouTube"
-                pkg.contains("spotify") || pkg.contains("qqmusic") || pkg.contains("neteasemusic") -> "音乐"
-                pkg.contains("operit") || pkg.contains("muyu") || pkg.contains("shizuku") -> "系统"
-                pkg.contains("launcher") || pkg.contains("com.android") -> "桌面"
-                else -> ""
+        handler.postDelayed({
+            when (outfit) {
+                "default" -> sayBubble("$appName 啊", "soft")
+                "formal" -> sayBubble("$appName 啊", "default")
+                "hoodie" -> sayBubble("$appName 啊", "warm")
+                "stealth" -> sayBubble("$appName 啊", "cold")
             }
-            if (appName.isNotEmpty()) {
-                handler.postDelayed({
-                    sayBubble("$appName 啊", "soft")
-                }, 800)
-            }
+        }, 600)
+    }
+
+    private fun getAppName(pkg: String): String {
+        return when {
+            pkg.contains("bilibili") -> "B站"
+            pkg.contains("weixin") || pkg.contains("tencent.mm") || pkg.contains("wechat") -> "微信"
+            pkg.contains("qq") && !pkg.contains("qqmusic") && !pkg.contains("tencent") -> "QQ"
+            pkg.contains("taobao") -> "淘宝"
+            pkg.contains("douyin") || pkg.contains("tiktok") -> "抖音"
+            pkg.contains("netflix") -> "Netflix"
+            pkg.contains("youtube") -> "YouTube"
+            pkg.contains("spotify") || pkg.contains("qqmusic") || pkg.contains("netease") -> "音乐"
+            pkg.contains("settings") -> "设置"
+            pkg.contains("shizuku") -> "Shizuku"
+            pkg.contains("operit") -> "Operit"
+            pkg.contains("launcher") || pkg.contains("com.android.launcher") -> "桌面"
+            else -> "这"
         }
     }
 

@@ -22,7 +22,7 @@
   }
   .pet {
     width: 120px;
-    height: 150px;
+    height: 160px;
     transition: transform 0.3s ease;
   }
   .pet.tilt-left  { transform: rotate(-5deg); }
@@ -82,7 +82,7 @@
   .zzz {
     position: absolute;
     top: 0;
-    right: 10px;
+    right: 12px;
     font-size: 13px;
     color: #8899cc;
     opacity: 0;
@@ -98,9 +98,9 @@
 <div class="container">
   <div class="bubble default" id="bubble"></div>
   <div class="zzz" id="zzz">Zzz</div>
-  <svg class="pet" id="pet" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
+  <svg class="pet" id="pet" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <radialGradient id="skullGrad" cx="50%" cy="35%" r="55%">
+      <radialGradient id="skullGrad" cx="45%" cy="35%" r="55%">
         <stop offset="0%" stop-color="#faf5ee"/>
         <stop offset="100%" stop-color="#d8cfc4"/>
       </radialGradient>
@@ -113,94 +113,94 @@
         <feGaussianBlur stdDeviation="1" result="blur"/>
         <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
-      <filter id="softShadow" x="-30%" y="-10%" width="160%" height="140%">
-        <feDropShadow dx="0" dy="1.5" stdDeviation="2" flood-color="#000" flood-opacity="0.2"/>
-      </filter>
     </defs>
 
     <!-- Ground shadow -->
-    <ellipse cx="60" cy="145" rx="24" ry="4" fill="rgba(0,0,0,0.18)"/>
+    <ellipse cx="60" cy="155" rx="22" ry="4" fill="rgba(0,0,0,0.15)"/>
 
-    <!-- Feet: tiny boots -->
-    <rect x="48" y="120" width="10" height="10" rx="3" fill="#1a1a22"/>
-    <rect x="62" y="120" width="10" height="10" rx="3" fill="#1a1a22"/>
-    <rect x="46" y="128" width="14" height="6" rx="2" fill="#2a2a36"/>
-    <rect x="60" y="128" width="14" height="6" rx="2" fill="#2a2a36"/>
+    <!-- Body: chibi torso, curved organic shape -->
+    <path d="M42 156 L42 130 Q42 98 44 88 L44 86 Q46 80 52 80 L68 80 Q74 80 76 86 L76 88 Q78 98 78 130 L78 156 Z"
+      fill="#1e1e28" stroke="#2a2a36" stroke-width="0.5"/>
 
-    <!-- Body: chibi torso with tactical vest -->
-    <g filter="url(#softShadow)">
-      <rect x="40" y="84" width="40" height="38" rx="7" fill="#282830"/>
-      <!-- Tactical vest panel -->
-      <rect x="38" y="86" width="44" height="34" rx="6" fill="#1c1c24"/>
-      <!-- Vest pockets -->
-      <rect x="42" y="90" width="12" height="10" rx="2" fill="#22222c" stroke="#333" stroke-width="0.4"/>
-      <rect x="66" y="90" width="12" height="10" rx="2" fill="#22222c" stroke="#333" stroke-width="0.4"/>
-      <!-- Vest pouches row -->
-      <rect x="42" y="104" width="7" height="5" rx="1" fill="#282834" stroke="#333" stroke-width="0.3"/>
-      <rect x="51" y="104" width="7" height="5" rx="1" fill="#282834" stroke="#333" stroke-width="0.3"/>
-      <rect x="60" y="104" width="7" height="5" rx="1" fill="#282834" stroke="#333" stroke-width="0.3"/>
-      <rect x="69" y="104" width="7" height="5" rx="1" fill="#282834" stroke="#333" stroke-width="0.3"/>
-    </g>
+    <!-- Tactical vest overlay -->
+    <path d="M44 88 L44 84 Q42 82 44 80 L52 78 L68 78 L76 80 Q78 82 76 84 L76 88 L76 132 Q76 138 72 138 L68 138 L67 124 L63 124 L63 138 L57 138 L57 124 L53 124 L53 138 L48 138 Q44 138 44 132 Z"
+      fill="#16161e" stroke="#2a2a36" stroke-width="0.4"/>
 
-    <!-- Arms with proper hand shapes, not ellipses -->
-    <!-- Left arm -->
-    <rect x="32" y="88" width="8" height="20" rx="4" fill="#282830"/>
-    <!-- Left hand: small rounded rectangle with finger lines -->
-    <rect x="30" y="106" width="10" height="8" rx="3" fill="#282830"/>
-    <line x1="33" y1="106" x2="33" y2="112" stroke="#333" stroke-width="0.4"/>
-    <line x1="35" y1="106" x2="35" y2="112" stroke="#333" stroke-width="0.4"/>
-    <line x1="37" y1="106" x2="37" y2="112" stroke="#333" stroke-width="0.4"/>
+    <!-- Vest pockets left -->
+    <rect x="48" y="92" width="8" height="10" rx="2" fill="#1e1e28" stroke="#2a2a36" stroke-width="0.3"/>
+    <!-- Vest pockets right -->
+    <rect x="64" y="92" width="8" height="10" rx="2" fill="#1e1e28" stroke="#2a2a36" stroke-width="0.3"/>
 
-    <!-- Right arm -->
-    <rect x="80" y="88" width="8" height="20" rx="4" fill="#282830"/>
-    <!-- Right hand -->
-    <rect x="80" y="106" width="10" height="8" rx="3" fill="#282830"/>
-    <line x1="83" y1="106" x2="83" y2="112" stroke="#333" stroke-width="0.4"/>
-    <line x1="85" y1="106" x2="85" y2="112" stroke="#333" stroke-width="0.4"/>
-    <line x1="87" y1="106" x2="87" y2="112" stroke="#333" stroke-width="0.4"/>
+    <!-- Vest mag pouches -->
+    <rect x="48" y="108" width="6" height="8" rx="1.5" fill="#1a1a24" stroke="#2a2a36" stroke-width="0.3"/>
+    <rect x="56" y="108" width="6" height="8" rx="1.5" fill="#1a1a24" stroke="#2a2a36" stroke-width="0.3"/>
+    <rect x="64" y="108" width="6" height="8" rx="1.5" fill="#1a1a24" stroke="#2a2a36" stroke-width="0.3"/>
 
-    <!-- Head: big chibi head -->
-    <!-- Balaclava base -->
-    <ellipse cx="60" cy="56" rx="26" ry="24" fill="#282830"/>
+    <!-- Left arm: curved path -->
+    <path d="M44 86 Q34 88 30 96 Q28 104 30 112 Q30 116 34 118 L38 118 Q42 118 44 114"
+      fill="#1e1e28" stroke="none"/>
+    <!-- Left hand: actual hand shape -->
+    <path d="M30 112 Q24 114 22 118 Q20 122 24 124 Q26 124 28 122 L30 124 Q32 126 34 124 Q36 126 38 122 Q40 120 38 118 Q36 116 34 114 Z"
+      fill="#1e1e28" stroke="#2a2a36" stroke-width="0.3"/>
 
-    <!-- Skull mask plate -->
-    <ellipse cx="60" cy="58" rx="19" ry="17" fill="url(#skullGrad)" stroke="#c4b8a8" stroke-width="0.5"/>
+    <!-- Right arm: curved path -->
+    <path d="M76 86 Q86 88 90 96 Q92 104 90 112 Q90 116 86 118 L82 118 Q78 118 76 114"
+      fill="#1e1e28" stroke="none"/>
+    <!-- Right hand: actual hand shape -->
+    <path d="M90 112 Q96 114 98 118 Q100 122 96 124 Q94 124 92 122 L90 124 Q88 126 86 124 Q84 126 82 122 Q80 120 82 118 Q84 116 86 114 Z"
+      fill="#1e1e28" stroke="#2a2a36" stroke-width="0.3"/>
 
-    <!-- Cheekbone lines -->
-    <path d="M43 62 Q41 58 43 52" fill="none" stroke="#ccc0b0" stroke-width="0.9" stroke-linecap="round"/>
-    <path d="M77 62 Q79 58 77 52" fill="none" stroke="#ccc0b0" stroke-width="0.9" stroke-linecap="round"/>
+    <!-- Feet: small boots -->
+    <path d="M48 154 Q44 154 42 156 L42 158 Q42 160 44 160 L52 160 Q54 160 54 158 L54 156 Q54 154 52 154 Z"
+      fill="#1a1a22" stroke="#2a2a36" stroke-width="0.3"/>
+    <path d="M66 154 Q62 154 60 156 L60 158 Q60 160 62 160 L70 160 Q72 160 72 158 L72 156 Q72 154 70 154 Z"
+      fill="#1a1a22" stroke="#2a2a36" stroke-width="0.3"/>
 
-    <!-- Eye sockets -->
-    <ellipse id="eyeL" cx="53" cy="56" rx="7" ry="7.5" fill="#0a0a0a"/>
-    <ellipse id="eyeR" cx="67" cy="56" rx="7" ry="7.5" fill="#0a0a0a"/>
+    <!-- Head: big chibi head, balaclava base -->
+    <path d="M34 60 Q32 28 60 18 Q88 28 86 60 Q88 78 86 82 Q84 86 80 86 L40 86 Q36 86 34 82 Q32 78 34 60 Z"
+      fill="#1e1e28" stroke="#2a2a36" stroke-width="0.4"/>
+
+    <!-- Balaclava fold lines -->
+    <path d="M38 42 Q36 44 36 48" fill="none" stroke="#2a2a36" stroke-width="0.5" stroke-linecap="round"/>
+    <path d="M82 42 Q84 44 84 48" fill="none" stroke="#2a2a36" stroke-width="0.5" stroke-linecap="round"/>
+
+    <!-- Skull mask: bone plate on face -->
+    <path d="M44 52 Q42 40 48 34 Q54 28 60 26 Q66 28 72 34 Q78 40 76 52
+      L76 72 Q76 78 72 80 Q68 82 64 82 L56 82 Q52 82 48 80 Q44 78 44 72 Z"
+      fill="url(#skullGrad)" stroke="#c4b8a8" stroke-width="0.5"/>
+
+    <!-- Cheekbone contours -->
+    <path d="M44 56 Q42 54 44 48" fill="none" stroke="#ccc0b0" stroke-width="1" stroke-linecap="round"/>
+    <path d="M76 56 Q78 54 76 48" fill="none" stroke="#ccc0b0" stroke-width="1" stroke-linecap="round"/>
+
+    <!-- Eye sockets: dark pits, angled for intensity -->
+    <ellipse id="eyeL" cx="53" cy="50" rx="7" ry="8" fill="#080808" transform="rotate(-2 53 50)"/>
+    <ellipse id="eyeR" cx="67" cy="50" rx="7" ry="8" fill="#080808" transform="rotate(2 67 50)"/>
 
     <!-- Glowing amber pupils -->
-    <ellipse class="eye-glow" id="eyeLeft" cx="53" cy="56" rx="3.5" ry="4"
+    <ellipse class="eye-glow" id="eyeLeft" cx="53" cy="50" rx="3.5" ry="4"
       fill="url(#eyeGlow)" filter="url(#eyeFilter)" opacity="1"/>
-    <ellipse class="eye-glow" id="eyeRight" cx="67" cy="56" rx="3.5" ry="4"
+    <ellipse class="eye-glow" id="eyeRight" cx="67" cy="50" rx="3.5" ry="4"
       fill="url(#eyeGlow)" filter="url(#eyeFilter)" opacity="1"/>
 
     <!-- Eye sparkle -->
-    <ellipse cx="50.5" cy="54" rx="1.4" ry="1.4" fill="#fff" opacity="0.85"/>
-    <ellipse cx="64.5" cy="54" rx="1.4" ry="1.4" fill="#fff" opacity="0.85"/>
+    <ellipse cx="50.5" cy="48" rx="1.4" ry="1.4" fill="#fff" opacity="0.85"/>
+    <ellipse cx="64.5" cy="48" rx="1.4" ry="1.4" fill="#fff" opacity="0.85"/>
 
     <!-- Nose cavity -->
-    <ellipse cx="60" cy="66" rx="2.5" ry="1.8" fill="#1a1a18"/>
+    <ellipse cx="60" cy="62" rx="2.5" ry="1.8" fill="#1a1a18"/>
 
-    <!-- Jaw crack -->
-    <path d="M45 72 Q52 76 60 74 Q68 76 75 72" fill="none" stroke="#c4b8a8" stroke-width="0.7" stroke-linecap="round"/>
-    <line x1="60" y1="74" x2="60" y2="79" stroke="#c4b8a8" stroke-width="0.5" stroke-linecap="round"/>
+    <!-- Jaw line: segmented skull jaw -->
+    <path d="M46 68 Q52 72 56 72 Q58 72 60 72" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
+    <path d="M60 72 Q62 72 64 72 Q68 72 74 68" fill="none" stroke="#c4b8a8" stroke-width="0.6" stroke-linecap="round"/>
+    <!-- Vertical crack -->
+    <line x1="60" y1="72" x2="60" y2="78" stroke="#c4b8a8" stroke-width="0.5" stroke-linecap="round"/>
 
     <!-- Teeth -->
-    <line x1="50" y1="72" x2="50" y2="76" stroke="#ccc0b0" stroke-width="0.4"/>
-    <line x1="56" y1="73" x2="56" y2="77" stroke="#ccc0b0" stroke-width="0.4"/>
-    <line x1="64" y1="73" x2="64" y2="77" stroke="#ccc0b0" stroke-width="0.4"/>
-    <line x1="70" y1="72" x2="70" y2="76" stroke="#ccc0b0" stroke-width="0.4"/>
-
-    <!-- Headphones around neck -->
-    <path d="M34 78 Q32 84 38 84" fill="none" stroke="#1a1a24" stroke-width="3" stroke-linecap="round"/>
-    <path d="M86 78 Q88 84 82 84" fill="none" stroke="#1a1a24" stroke-width="3" stroke-linecap="round"/>
-    <path d="M38 82 Q60 90 82 82" fill="none" stroke="#1a1a24" stroke-width="2" stroke-linecap="round"/>
+    <line x1="50" y1="68" x2="50" y2="72" stroke="#ccc0b0" stroke-width="0.4"/>
+    <line x1="56" y1="70" x2="56" y2="74" stroke="#ccc0b0" stroke-width="0.4"/>
+    <line x1="64" y1="70" x2="64" y2="74" stroke="#ccc0b0" stroke-width="0.4"/>
+    <line x1="70" y1="68" x2="70" y2="72" stroke="#ccc0b0" stroke-width="0.4"/>
   </svg>
 </div>
 <script>

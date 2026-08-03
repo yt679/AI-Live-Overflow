@@ -11,7 +11,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.provider.Settings
 import android.view.*
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -186,9 +185,12 @@ class OverlayService : Service() {
         handler.postDelayed({
             when (outfit) {
                 "default" -> sayBubble("$appName 啊", "soft")
-                "formal" -> sayBubble("$appName 啊", "default")
-                "hoodie" -> sayBubble("$appName 啊", "warm")
-                "stealth" -> sayBubble("$appName 啊", "cold")
+                "stealth" -> sayBubble("安静", "cold")
+                "formal" -> sayBubble("正经点", "default")
+                "work" -> sayBubble("搬砖了啊", "default")
+                "music" -> sayBubble("来点音乐", "warm")
+                "chill" -> sayBubble("逛起来了", "soft")
+                "read" -> sayBubble("看书了啊", "soft")
             }
         }, 600)
     }
@@ -216,9 +218,12 @@ class OverlayService : Service() {
     private fun getOutfitForApp(pkg: String): String {
         return when {
             pkg.contains("launcher") || pkg.contains("com.android.launcher") -> "default"
-            pkg.contains("xingin.xhs") || pkg.contains("phoenix.read") || pkg.contains("aweme") || pkg.contains("netflix") || pkg.contains("youtube") -> "hoodie"
+            pkg.contains("xingin.xhs") -> "chill"
+            pkg.contains("phoenix.read") -> "read"
+            pkg.contains("alibaba.android.rimet") -> "work"
+            pkg.contains("aweme") || pkg.contains("douyin") -> "music"
+            pkg.contains("weixin") || pkg.contains("wechat") || pkg.contains("tencent.mm") -> "formal"
             pkg.contains("settings") || pkg.contains("shizuku") || pkg.contains("operit") -> "stealth"
-            pkg.contains("weixin") || pkg.contains("wechat") || pkg.contains("tencent.mm") || pkg.contains("alibaba.android.rimet") -> "formal"
             else -> "default"
         }
     }

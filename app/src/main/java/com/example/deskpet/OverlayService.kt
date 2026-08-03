@@ -192,7 +192,7 @@ class OverlayService : Service() {
                 "chill" -> arrayOf("逛起来了", "悠闲", "放松", "逛着", "慢悠悠", "躺平", "舒服", "晃着")
                 "read" -> arrayOf("看书了啊", "长知识", "翻页", "安静看", "有文化", "别吵", "看得进去吗", "读到哪了")
             }
-            sayBubble(lines.random(), "soft")
+            sayBubble(lines[(Math.random() * lines.size).toInt()], "soft")
         }, 600)
     }
 
